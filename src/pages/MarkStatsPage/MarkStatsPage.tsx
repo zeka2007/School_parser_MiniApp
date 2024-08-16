@@ -6,7 +6,8 @@ import { AccordionSummary } from '@telegram-apps/telegram-ui/dist/components/Blo
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
 import axios from 'axios';
 import { useEffect, useState, type FC } from 'react';
-import { useLocation, useNavigate, } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { Link, useLocation, useNavigate, } from 'react-router-dom';
 
 export const MarkStatsPage: FC = () => {
     const [expanded, setExpanded] = useState(false)
@@ -18,8 +19,29 @@ export const MarkStatsPage: FC = () => {
     const [selectQuarter, setSelectQuarter] = useState(data.user.quarter - 1)
     const [quarterLoading, setQuarterLoading] = useState(false)
 
+    const getData = async (): Promise<StudentData> => {
+        const {data} = await axios.get('https://dummyjson.com/users')
+  
+        return data;
+        // then((value) => {
+        //   if (value.status == 200) {
+        //     const newData:StudentData = value.data
+        //     const best_lesson_data = getBestLesson(newData.lessons)
+        //     newData.best_lesson = best_lesson_data
+        //     setData(value.data)
+        //     setLoading(false)
+        //   }
+        // }).catch(() => {
+        //   setLoading(false)
+        //   setErrorState(true)
+        // })
+    }
+  
+    const result = useQuery('test', getData)
+    console.log(result)
     return (
         <List>
+            <h1>{result.isLoading}</h1>
             {!data.lessons.length &&<Placeholder header='Отметок нет' description='Попробуйте изменить четверть'/>}
             <Accordion 
                 onChange={(state: boolean) => {if (!quarterLoading) setExpanded(state) }} 

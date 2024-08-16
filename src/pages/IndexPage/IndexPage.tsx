@@ -16,7 +16,8 @@ import { useQuery } from 'react-query';
 
 export const IndexPage: FC = () => {
 
-  const { initDataRaw } = retrieveLaunchParams();
+  // const { initDataRaw } = retrieveLaunchParams();
+  const initDataRaw = 'query_id=AAHzAJ5DAAAAAPMAnkPYzpuq&user=%7B%22id%22%3A1134428403%2C%22first_name%22%3A%22%D0%95%D0%B2%D0%B3%D0%B5%D0%BD%D0%B8%D0%B9%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22zeka2007%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1723827523&hash=3925bde0ed587958646e79b2a9c6b89e15283dcb70f61fa6720b1d14d692f3ae'
   const [showNotification, setShowNotification] = useState(false)
 
   const getData = async (): Promise<StudentData> => {
@@ -39,11 +40,15 @@ export const IndexPage: FC = () => {
       // })
   }
 
-  const { data, isLoading, isError} = useQuery('user-data', getData, {
+  
+
+  const { data, isLoading, isError} = useQuery('user', getData, {
     retry:false,
     keepPreviousData: true,
     refetchOnWindowFocus: false
   })
+
+  console.log(isLoading)
 
   useEffect(() => setShowNotification(isError), [isError])
 
