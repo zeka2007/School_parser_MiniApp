@@ -20,7 +20,16 @@ import { routes } from '@/navigation/routes.tsx';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
 export const App: FC = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient(
+    {
+      defaultOptions: {
+        queries:{
+          retry: false,
+          refetchOnWindowFocus: false,
+        }
+      }
+    }
+  );
 
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
@@ -50,6 +59,8 @@ export const App: FC = () => {
     navigator.attach();
     return () => navigator.detach();
   }, [navigator]);
+
+
 
   return (
     <QueryClientProvider client={queryClient}>

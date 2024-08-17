@@ -1,10 +1,10 @@
 import { Section, List, Cell, Navigation, IconContainer, Spinner, Accordion, Image, Selectable, ButtonCell, Snackbar, Placeholder, Text, Title } from '@telegram-apps/telegram-ui';
 import { useEffect, useState, type FC } from 'react';
 
-import { Error } from '@mui/icons-material';
+import Error from '@mui/icons-material/Error'
 
 import './IndexPage.css'
-import axios from 'axios';
+import axios, { Axios, AxiosError } from 'axios';
 import {retrieveLaunchParams} from '@tma.js/sdk-react';
 import { StudentData } from '@/common/Types';
 
@@ -12,43 +12,28 @@ import StatContent from './StatContent';
 import UtilsComponent from './UtilsContent';
 import ActionsComponent from './ActionsComponent';
 import { useQuery } from 'react-query';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 
 export const IndexPage: FC = () => {
 
-  // const { initDataRaw } = retrieveLaunchParams();
-  const initDataRaw = 'query_id=AAHzAJ5DAAAAAPMAnkPYzpuq&user=%7B%22id%22%3A1134428403%2C%22first_name%22%3A%22%D0%95%D0%B2%D0%B3%D0%B5%D0%BD%D0%B8%D0%B9%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22zeka2007%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1723827523&hash=3925bde0ed587958646e79b2a9c6b89e15283dcb70f61fa6720b1d14d692f3ae'
+  const { initDataRaw } = retrieveLaunchParams();
   const [showNotification, setShowNotification] = useState(false)
+  const navigate = useNavigate()
 
-  const getData = async (): Promise<StudentData> => {
-      const {data} = await axios.get('http://localhost:5000/api/user/get-data', {headers: {
+  const getData = async (params: URLSearchParams): Promise<StudentData> => {
+      let par = ''
+      if (params.get('type')) par = `?type=${params.get('type')}&id=${params.get('id')}`
+      const {data} = await axios.get(`http://localhost:5000/api/user/get-data/${par}`, {headers: {
         'Authorization': initDataRaw
       }})
 
       return data;
-      // then((value) => {
-      //   if (value.status == 200) {
-      //     const newData:StudentData = value.data
-      //     const best_lesson_data = getBestLesson(newData.lessons)
-      //     newData.best_lesson = best_lesson_data
-      //     setData(value.data)
-      //     setLoading(false)
-      //   }
-      // }).catch(() => {
-      //   setLoading(false)
-      //   setErrorState(true)
-      // })
   }
 
-  
+  const [searchParams] = useSearchParams()
 
-  const { data, isLoading, isError} = useQuery('user', getData, {
-    retry:false,
-    keepPreviousData: true,
-    refetchOnWindowFocus: false
-  })
-
-  console.log(isLoading)
+  const { data, error, isLoading, isError} = useQuery<StudentData, AxiosError>('user', () => getData(searchParams))
 
   useEffect(() => setShowNotification(isError), [isError])
 
@@ -56,7 +41,9 @@ export const IndexPage: FC = () => {
       return <div id='loading-spinner'><Spinner size='l'/></div>
   }
 
-  return (
+  if (error && error.response?.status == 404) navigate('/diaries', {replace: true})
+
+  else return (
     <List style={{
       height: '100vh',
       background: 'var(--tgui--secondary_bg_color)',
@@ -68,10 +55,10 @@ export const IndexPage: FC = () => {
       <Section>
 
         <Cell
-            before={<Image size={40} src={'https://avatars.githubusercontent.com/u/84640980?v=4'}/>}
+            before={<Image size={40} src={''}><Title style={{color: 'var(--tgui--button_color)'}} weight='2' caps>{data?.user.description[0]}</Title></Image>}
             after={<Selectable defaultChecked/>}
-            subtitle={data?.user.student_id}>Дневник SCHOOLS.BY</Cell>
-        <ButtonCell>Управление дневниками</ButtonCell>
+            subtitle={data?.user.description}>{data?.user.type}</Cell>
+        <ButtonCell onClick={() => navigate('/diaries')}>Управление дневниками</ButtonCell>
 
       </Section>
 

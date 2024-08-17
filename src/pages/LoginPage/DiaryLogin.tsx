@@ -1,6 +1,6 @@
 import { List, Cell, Input, Switch, Text, Tooltip, FixedLayout, Button } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   retrieveLaunchParams,
   useHapticFeedback,
@@ -10,21 +10,24 @@ import {
 import axios, { AxiosError } from 'axios'
 import { useMutation } from 'react-query';
 import { LoginData } from '@/common/Types';
+import { useNavigate } from 'react-router-dom';
 
-async function sendData (loginData: LoginData, initDataRaw: string | undefined) {
-  await axios.post('http://localhost:5000/api/login/', loginData,
-  {
-    headers: {
-      'Authorization': initDataRaw
+async function sendData (loginData: LoginData, initDataRaw: string | undefined): Promise<{ id: number; }> {
+  const {data} = await axios.post('http://localhost:5000/api/user/login/', loginData,
+    {
+      headers: {
+        'Authorization': initDataRaw
+      }
     }
-  }
-)
+  )
+  return data
 }
 
 const DiaryLogin: FC = () => {
 
 
   const tipRef = React.createRef<HTMLElement>();
+  const navigate = useNavigate()
   const [tipState, setTipState] = React.useState(false);
 
   const [loginVal, setLoginVal] = useState("");
@@ -66,11 +69,12 @@ const DiaryLogin: FC = () => {
     (loginData: LoginData) => sendData(loginData, initDataRaw),
     {
       onError: onError,
-      onSuccess: () => haptic.notificationOccurred('success') 
+      onSuccess: (responce) => {
+        haptic.notificationOccurred('success') 
+        navigate(`/?type=0&id=${responce.id}`, {replace: true})
+      } 
     }
   )
-
-  useEffect(() => console.log(initDataRaw), [initDataRaw])
 
   React.useEffect(() => {
     if (loginVal === "" || passworVal === "") {
@@ -125,7 +129,7 @@ const DiaryLogin: FC = () => {
         </Tooltip>
       }
       </List>
-      <FixedLayout style={{padding: '12px'}}>
+      <FixedLayout style={{padding: 16}}>
         <Button
           size="l" 
           stretched 

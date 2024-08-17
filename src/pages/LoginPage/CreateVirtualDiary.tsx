@@ -7,28 +7,24 @@ import {
   usePopup,
 } from '@tma.js/sdk-react';
 
-import axios, { AxiosError } from 'axios'
-import { useMutation } from 'react-query';
-import { LoginData } from '@/common/Types';
-
-async function sendData (data: {name: string}, initDataRaw: string | undefined) {
-  await axios.post('http://localhost:5000/api/diary/create', data,
-  {
-    headers: {
-      'Authorization': initDataRaw
-    }
-  }
-)
-}
+import { useMutation, useQuery } from 'react-query';
+import { DiaryCreate, DiaryData } from '@/common/Types';
+import { useNavigate } from 'react-router-dom';
+import { createDiary, getDiaries } from '@/common/Utils/DiaryUtils';
 
 const CreateVirtualDiary: FC = () => {
 
+  const { initDataRaw } = retrieveLaunchParams();
+
+  const navigate = useNavigate()
+
 
   const [nameValue, setNameValue] = useState("");
+  const [optionValue, setOptionValue] = useState("");
+  const [optionType, setOptionType] = useState<string | null>("");
 
   const [isDisabled, setDisabled] = useState(false);
 
-  const { initDataRaw } = retrieveLaunchParams();
   const haptic = useHapticFeedback()
   const popup = usePopup();
 
@@ -44,16 +40,18 @@ const CreateVirtualDiary: FC = () => {
       })
     }
   
-
+  const diaries = useQuery('diaries', () => getDiaries(initDataRaw), {retry: true})
+  
   const {mutate, isLoading} = useMutation(
-    (data: {name: string}) => sendData(data, initDataRaw),
+    (data: DiaryCreate) => createDiary(data, initDataRaw),
     {
       onError: onError,
-      onSuccess: () => haptic.notificationOccurred('success') 
+      onSuccess: (responce) => {
+        haptic.notificationOccurred('success') 
+        navigate(`/?type=1&id=${responce.id}`, {replace: true})
+      }
     }
   )
-
-  useEffect(() => console.log(initDataRaw), [initDataRaw])
 
   React.useEffect(() => {
     if (nameValue === "") {
@@ -74,27 +72,36 @@ const CreateVirtualDiary: FC = () => {
           header="Имя"
           value={ nameValue }
           placeholder='Введите имя для дневника'
-          onChange={ (e: React.FormEvent<HTMLInputElement>) => {
-            setNameValue(e.currentTarget.value);
-          }}/>
-          <Select header='Скопировать из'>
-            <option >Не копировать</option>
-            <option >SCHOOLS.BY (412342)</option>
-            <option >Виртуальный дневник #eva</option>
+          onChange={ (e: React.FormEvent<HTMLInputElement>) => setNameValue(e.currentTarget.value)}/>
+          <Select header='Скопировать из' onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setOptionValue(e.target.value)
+              setOptionType(e.target.options[e.target.selectedIndex].getAttribute('data-type'))
+            }
+          }>
+            <option key={0} value={'no'}>Не копировать</option>
+            { diaries.data && diaries.data?.map((el, i) => <option key={i+1} data-type={el.type} value={el.id.toString()}>{`${el.type} (${el.name})`}</option>) }
           </Select>
        
       </List>
-      <FixedLayout style={{padding: '12px'}}>
+      <FixedLayout style={{padding: 16}}>
         <Button
           size="l" 
           stretched 
           loading={isLoading}
           disabled={isLoading || isDisabled}
-          onClick={() => mutate(
-            {
-              name: nameValue
+          onClick={() => {
+            let extend;
+            if (optionValue != 'no') extend = {
+              type: optionType,
+              id: Number(optionValue)
             }
-          )}>
+            mutate(
+            {
+              name: nameValue,
+              extend: extend
+            }
+          )}}
+          >
             Создать
         </Button>
       </FixedLayout>
