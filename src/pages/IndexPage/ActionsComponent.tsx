@@ -46,6 +46,7 @@ const ActionsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
                         }/>
                 }>Основной дневник</Cell>
             <Cell after={<Navigation/>}>Создать копию дневника</Cell>
+            {data?.user.type == 'Виртуальный дневник' && <Cell onClick={() => navigate('/lessons', {state: data})} after={<Navigation/>}>Управление предметами</Cell>}
 
             
             {data?.user.type == 'SCHOOLS.BY' && <ButtonCell mode='destructive'>Удалить логин и пароль</ButtonCell>}
@@ -59,6 +60,8 @@ const ActionsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
                             id: data.user.diary_id
                         })}
                 }>Удалить дневник</ButtonCell>
+
+            
         </Section>
     )
 }
