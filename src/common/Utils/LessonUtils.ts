@@ -1,7 +1,6 @@
 import axios from "axios"
-import { DiaryCreate, DiaryData } from "../Types"
 import { Popup } from "@tma.js/sdk-react"
-import { Mutation, UseMutationResult } from "react-query"
+import { UseMutationResult } from "react-query"
 import { DeleteLessonData, LessonCreate, LessonData, LessonUpdate } from "../Types/LessonTypes"
 
 
@@ -22,37 +21,8 @@ export const deleteLessonDialog = async (popup: Popup, mutation: UseMutationResu
     )
 }
 
-export const deleteLessonMarksDialog = async (popup: Popup, mutation: UseMutationResult<any, unknown, DeleteLessonData, unknown>, data: DeleteLessonData) => {
-    popup.open(
-        {
-            title: 'Стереть все отметки?',
-            message: 'Все отметки (кол-во) будут удалены. Это действие нельзя отменить',
-            buttons: [
-                {id: 'cancel', type: 'cancel'},
-                {id: 'delete', type: 'destructive', text: 'Стереть'}
-            ]
-        }
-    ).then(
-        btnId => {
-            if (btnId == 'delete') mutation.mutate(data)
-        }
-    )
-}
-
 export async function deleteLesson (sendData: DeleteLessonData, initDataRaw: string | undefined) {
     const { data } = await axios.post('http://localhost:5000/api/lesson/delete/', sendData,
-        {
-        headers: {
-            'Authorization': initDataRaw
-        }
-        }
-    )
-    return data
-
-}
-
-export async function deleteLessonMarks (sendData: DeleteLessonData, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/lesson/delete-marks/', sendData,
         {
         headers: {
             'Authorization': initDataRaw

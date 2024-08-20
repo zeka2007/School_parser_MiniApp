@@ -1,7 +1,8 @@
 import { StudentData } from '@/common/Types';
 import { LessonCreate, LessonData } from '@/common/Types/LessonTypes';
 import { createLesson, getLessons } from '@/common/Utils/LessonUtils';
-import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder } from '@telegram-apps/telegram-ui';
+import { getRandomString } from '@/common/Utils/Utils';
+import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Skeleton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
 import { AxiosError } from 'axios';
@@ -20,8 +21,7 @@ export const LessonsPage: FC = () => {
 
   const userData: StudentData = useLocation().state
 
-  const queryClient = useQueryClient()
-  const { data, error, isLoading, isError} = useQuery<LessonData[]>('lessons', () => getLessons(initDataRaw, userData.user.diary_id), {
+  const { data, isLoading, refetch} = useQuery<LessonData[]>('lessons', () => getLessons(initDataRaw, userData.user.diary_id), {
     retry: true
   })
 
@@ -34,6 +34,7 @@ export const LessonsPage: FC = () => {
               header='Управление предметами'
               description='На этой странице вы можете создать, изменить или удалить учебный предмет для виртуального дневника'/>
 
+        {isLoading && [...Array(3)].map((_, i) => <Cell key={i}><Skeleton withoutAnimation visible>{new Array(50).join('*')}</Skeleton></Cell>)}
 
         {data?.map((lesson) => <Cell 
                       key={lesson.id}
@@ -51,7 +52,7 @@ export const LessonsPage: FC = () => {
     
         <Modal
           header={<ModalHeader>Добавление предмета</ModalHeader>}
-          onOpenChange={(is_open) => {queryClient.invalidateQueries('lessons'); setModalState(is_open)}}
+          onOpenChange={(is_open) => {refetch(); setModalState(is_open)}}
           open={modalState}
         >
           <List >

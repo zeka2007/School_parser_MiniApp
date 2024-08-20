@@ -1,7 +1,9 @@
 import { Lesson, StudentData } from '@/common/Types';
 import { DeleteLessonData, LessonData, LessonUpdate } from '@/common/Types/LessonTypes';
-import { deleteLesson, deleteLessonDialog, deleteLessonMarks, deleteLessonMarksDialog, updateLesson } from '@/common/Utils/LessonUtils';
-import { Button, ButtonCell, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Section } from '@telegram-apps/telegram-ui';
+import { DeleteMarkData } from '@/common/Types/MarkTypes';
+import { deleteLesson, deleteLessonDialog, updateLesson } from '@/common/Utils/LessonUtils';
+import { deleteLessonMarksDialog, deleteMarks, getMarkString, getMarksCount } from '@/common/Utils/MarksUtils';
+import { Button, ButtonCell, Cell, FixedLayout, Input, List, Text, Navigation, Placeholder, Section, Banner } from '@telegram-apps/telegram-ui';
 import { retrieveLaunchParams, usePopup } from '@tma.js/sdk-react';
 import { useState, type FC } from 'react';
 import { useMutation } from 'react-query';
@@ -26,7 +28,7 @@ export const LessonsEditPage: FC = () => {
       }
   )
   const deleteMarksMutation = useMutation(
-    (deleteData: DeleteLessonData) => deleteLessonMarks(deleteData, initDataRaw),
+    (deleteData: DeleteMarkData) => deleteMarks(deleteData, initDataRaw),
       {
           onSuccess: () => navigate(-1)
       }
@@ -42,11 +44,12 @@ export const LessonsEditPage: FC = () => {
 
         </Section>
         <Section header='Действия'>
+          <Cell after={<Navigation/>} onClick={() => navigate('/marks', {state: data})}>Управление отметками</Cell>
           <ButtonCell mode='destructive' onClick={() => {
               deleteLessonMarksDialog(popup, deleteMarksMutation, {
-                id: data.lesson.id,
+                lesson_id: data.lesson.id,
                 diary_id: data.lesson.attached_to_diary
-            })
+            }, getMarksCount(data.lesson.marks))
           }}>Стереть все отметки</ButtonCell>
           <ButtonCell onClick={() => {
               deleteLessonDialog(popup, deleteMutation, {
@@ -60,7 +63,7 @@ export const LessonsEditPage: FC = () => {
       <FixedLayout style={{padding: 16}}>
           <Button 
             size="l" 
-            disabled={data.lesson.name == name || name === ""} 
+            disabled={data.lesson.name == name || name.trim() == ''} 
             stretched 
             onClick={() => {
               updateMutation.mutate(

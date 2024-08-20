@@ -1,0 +1,30 @@
+.chip {
+    align-items: center;
+    border-radius: 10px;
+    box-sizing: border-box;
+    display: inline-flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 8px 12px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    margin: 5px;
+    box-shadow: 0 0 0 2px var(--tgui--outline);
+}
+
+.chip-selected {
+    box-shadow: 0 0 0 2px var(--tgui--button_color);
+}
+
+.chip > span {
+    font-size: 48px;
+    font-family: var(--tgui--font-family);
+
+}
+
+.slash {
+    font-size: 48px;
+    font-family: var(--tgui--font-family);
+    margin: 0 12px;
+}

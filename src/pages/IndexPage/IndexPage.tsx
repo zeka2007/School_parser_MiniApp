@@ -4,7 +4,7 @@ import { useEffect, useState, type FC } from 'react';
 import Error from '@mui/icons-material/Error'
 
 import './IndexPage.css'
-import axios, { Axios, AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import {retrieveLaunchParams} from '@tma.js/sdk-react';
 import { StudentData } from '@/common/Types';
 
@@ -12,7 +12,8 @@ import StatContent from './StatContent';
 import UtilsComponent from './UtilsContent';
 import ActionsComponent from './ActionsComponent';
 import { useQuery } from 'react-query';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import {  useNavigate, useSearchParams } from 'react-router-dom';
+import { getUserData } from '@/common/Utils/UserUtils';
 
 
 export const IndexPage: FC = () => {
@@ -21,19 +22,18 @@ export const IndexPage: FC = () => {
   const [showNotification, setShowNotification] = useState(false)
   const navigate = useNavigate()
 
-  const getData = async (params: URLSearchParams): Promise<StudentData> => {
-      let par = ''
-      if (params.get('type')) par = `?type=${params.get('type')}&id=${params.get('id')}`
-      const {data} = await axios.get(`http://localhost:5000/api/user/get-data/${par}`, {headers: {
-        'Authorization': initDataRaw
-      }})
-
-      return data;
-  }
-
   const [searchParams] = useSearchParams()
 
-  const { data, error, isLoading, isError} = useQuery<StudentData, AxiosError>('user', () => getData(searchParams))
+  const { data, error, isLoading, isError} = useQuery<StudentData, AxiosError>('user', () => {
+    let params = new URLSearchParams()
+    const type = searchParams.get('type')
+    const id = searchParams.get('id')
+    if ( type && id ) {
+      params.append('type', type)
+      params.append('id', id)
+    }
+    return getUserData(initDataRaw, params)
+  }, {keepPreviousData: true})
 
   useEffect(() => setShowNotification(isError), [isError])
 

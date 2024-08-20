@@ -29,9 +29,12 @@ export interface User {
 }
 
 export interface Mark {
-    first_value: number,
-    second_value?: number,
-    date: string
+    first_value: number | null,
+    second_value: number | null,
+    display_value: string | null,
+    attached_to_lesson: number,
+    date: string,
+    _id: number,
 }
 export interface Lesson {
     lesson_name: string,
@@ -45,7 +48,7 @@ export interface BestLesson {
 
 export interface StudentData {
     user: User,
-    lessons: [Lesson],
+    lessons: Lesson[],
     average_mark?: number,
     most_common?: string,
     marks_count?: number,

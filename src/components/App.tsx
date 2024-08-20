@@ -3,8 +3,9 @@ import {
   bindMiniAppCSSVars,
   bindThemeParamsCSSVars,
   bindViewportCSSVars,
-  initNavigator, useLaunchParams,
+  initNavigator, useHapticFeedback, useLaunchParams,
   useMiniApp,
+  usePopup,
   useThemeParams,
   useViewport
 } from '@tma.js/sdk-react';
@@ -18,23 +19,34 @@ import {
 
 import { routes } from '@/navigation/routes.tsx';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { showErrorDialog } from '@/common/Utils/Utils';
 
 export const App: FC = () => {
+
+  const lp = useLaunchParams();
+  const miniApp = useMiniApp();
+  const themeParams = useThemeParams();
+  const viewport = useViewport();
+
+  const popup = usePopup()
+  const {notificationOccurred} = useHapticFeedback()
+
   const queryClient = new QueryClient(
     {
       defaultOptions: {
         queries:{
           retry: false,
           refetchOnWindowFocus: false,
+        },
+        mutations: {
+          onError: () => { 
+            showErrorDialog(popup);
+            notificationOccurred('error');
+          }
         }
       }
     }
   );
-
-  const lp = useLaunchParams();
-  const miniApp = useMiniApp();
-  const themeParams = useThemeParams();
-  const viewport = useViewport();
 
   useEffect(() => {
     return bindMiniAppCSSVars(miniApp, themeParams);
