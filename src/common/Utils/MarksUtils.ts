@@ -6,7 +6,8 @@ import { UseMutationResult } from "react-query";
 
 export const marksList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'н.', 'осв.']
 
-export function calculateSumAndCount(marks: Mark[]): {sum: number, length: number} {
+export function calculateSumAndCount(marks?: Mark[]): {sum: number, length: number} {
+    if (!marks) return {sum: 0, length: 0}
     var sum = 0;
     var length = 0;
     marks.forEach((mark) => {
@@ -85,6 +86,22 @@ export const deleteLessonMarksDialog = async (popup: Popup, mutation: UseMutatio
     ).then(
         btnId => {
             if (btnId == 'delete') mutation.mutate(data)
+        }
+    )
+}
+
+export const showDeleteTemporaryMarkDialog = async (popup: Popup, callback: CallableFunction = () => {}) => {
+    popup.open(
+        {
+            message: `Удалить отметку?`,
+            buttons: [
+                {id: 'cancel', type: 'default', text: 'Нет'},
+                {id: 'delete', type: 'destructive', text: 'Да'}
+            ]
+        }
+    ).then(
+        btnId => {
+            if (btnId == 'delete') callback()
         }
     )
 }

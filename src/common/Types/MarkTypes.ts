@@ -18,3 +18,8 @@ export interface DeleteMarkData {
     lesson_id: number
     mark_ids?: number[]
 }
+
+export interface FixMark {
+    mark: number
+    count: number
+}

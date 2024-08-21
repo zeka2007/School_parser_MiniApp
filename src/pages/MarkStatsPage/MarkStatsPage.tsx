@@ -1,6 +1,6 @@
 
 import {useState, type FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { QuaretrChoose } from './QuarterChoose';
 import { StudentData } from '@/common/Types';
 import { Cell, List, Placeholder, Text} from '@telegram-apps/telegram-ui';
@@ -13,10 +13,10 @@ import { calculateAverage } from '@/common/Utils/MarksUtils';
 export const MarkStatsPage: FC = () => {
 
     const state: StudentData = useLocation().state
+    const navigatePath = useSearchParams()[0].get('navto')
     const navigate = useNavigate()
     const { initDataRaw } = retrieveLaunchParams();
     const [quarter, setQuarter] = useState(state.user.quarter)
-
 
     const query = useQuery(['lesson-marks', quarter], () => {
         let params = new URLSearchParams();
@@ -36,7 +36,7 @@ export const MarkStatsPage: FC = () => {
             {query.data?.lessons.map((val) => <Cell 
                     key={val.lesson_name} 
                     description={"Отметок: " + val.marks.length}
-                    onClick={() => navigate('mark-stat-full', {state: val})}
+                    onClick={() => navigate(navigatePath ? navigatePath : '/', {state: val})}
                     after={<Text>{calculateAverage(val.marks)}</Text>}>{val.lesson_name}</Cell>
             )}
         </List>

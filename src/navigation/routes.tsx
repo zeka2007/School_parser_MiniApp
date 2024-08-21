@@ -9,6 +9,8 @@ import { DiariesPage } from '@/pages/DiariesPage/DiariesPage';
 import { LessonsPage } from '@/pages/LessonsPage/LessonsPage';
 import { LessonsEditPage } from '@/pages/LessonEditPage/LessonEditPage';
 import { MarksPage } from '@/pages/MarksPage/MarksPage';
+import { MarkAddCheckPage } from '@/pages/MarkAddCheckPage/MarkAddCheckPage';
+import { FixesPage } from '@/pages/FixesPage/FixesPage';
 
 
 interface Route {
@@ -27,5 +29,7 @@ export const routes: Route[] = [
   { path: '/lesson-edit', Component: LessonsEditPage, title: 'lesson-edit'},
   { path: '/mark-stat-full', Component: MarkStatsFullPage, title: 'mark-stat-full'},
   { path: '/marks', Component: MarksPage, title: 'marks-control'},
+  { path: '/mark-add-check', Component: MarkAddCheckPage},
+  { path: '/fixes', Component: FixesPage},
   { path: '/test', Component: TestPage, title: 'test'}
 ];

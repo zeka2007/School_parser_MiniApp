@@ -8,14 +8,16 @@ const UtilsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
 
     const navigate = useNavigate()
 
+    const navToStatPage = (lessonPath: string) => navigate('/mark-stat?navto=' + lessonPath, {state: data})
+
     return (
         <Section header={'Инструменты'}>
             <Cell 
                 after={<Navigation/>} 
-                onClick={() => { navigate('mark-stat', {state: data}) }}>Анализ отметок</Cell>
-            <Cell after={<Navigation/>}>Способы исправления</Cell>
+                onClick={() => navToStatPage('mark-stat-full')}>Анализ отметок</Cell>
+            <Cell onClick={() => navToStatPage('fixes')} after={<Navigation/>} >Способы исправления</Cell>
             <Cell after={<Navigation/>}>Анализ четвертей</Cell>
-            <Cell after={<Navigation/>}>Калькулятор отметок</Cell>
+            <Cell onClick={() => navToStatPage('mark-add-check')} after={<Navigation/>}>Калькулятор отметок</Cell>
             <Cell after={<Navigation/>}>Экспорт данных</Cell>
             
         </Section>
