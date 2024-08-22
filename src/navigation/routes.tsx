@@ -11,6 +11,8 @@ import { LessonsEditPage } from '@/pages/LessonEditPage/LessonEditPage';
 import { MarksPage } from '@/pages/MarksPage/MarksPage';
 import { MarkAddCheckPage } from '@/pages/MarkAddCheckPage/MarkAddCheckPage';
 import { FixesPage } from '@/pages/FixesPage/FixesPage';
+import { QuartersPage } from '@/pages/QuartersPage/QuartersPage';
+import { ReportPage } from '@/pages/ReportPage/ReportPage';
 
 
 interface Route {
@@ -31,5 +33,7 @@ export const routes: Route[] = [
   { path: '/marks', Component: MarksPage, title: 'marks-control'},
   { path: '/mark-add-check', Component: MarkAddCheckPage},
   { path: '/fixes', Component: FixesPage},
+  { path: '/quarters', Component: QuartersPage},
+  { path: '/report', Component: ReportPage},
   { path: '/test', Component: TestPage, title: 'test'}
 ];

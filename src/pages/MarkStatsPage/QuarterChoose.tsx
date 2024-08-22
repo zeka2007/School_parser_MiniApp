@@ -1,5 +1,5 @@
-import { Mark, StudentData } from '@/common/Types';
-import { Accordion, Cell, LargeTitle, List, Placeholder, Section, Selectable, Spinner, Text } from '@telegram-apps/telegram-ui';
+import { StudentData } from '@/common/Types';
+import { Accordion, Cell, Selectable, Spinner } from '@telegram-apps/telegram-ui';
 import { AccordionContent } from '@telegram-apps/telegram-ui/dist/components/Blocks/Accordion/components/AccordionContent/AccordionContent';
 import { AccordionSummary } from '@telegram-apps/telegram-ui/dist/components/Blocks/Accordion/components/AccordionSummary/AccordionSummary';
 import { useState, type FC } from 'react';
@@ -10,7 +10,7 @@ export const QuaretrChoose: FC<{state: StudentData, query: UseQueryResult, callb
     const [selectQuarter, setSelectQuarter] = useState(state.user.quarter - 1)
     
     return (
-        <Accordion 
+        <Accordion
             onChange={(state: boolean) => {if (!query.isLoading) setExpanded(state) }} 
             expanded={expanded}>
             <AccordionSummary
@@ -31,6 +31,5 @@ export const QuaretrChoose: FC<{state: StudentData, query: UseQueryResult, callb
                         }}>{i+1} четверть</Cell>)}
             </AccordionContent>
         </Accordion>
-
     );
 };

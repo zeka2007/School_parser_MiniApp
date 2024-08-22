@@ -18,7 +18,8 @@ export const MarkAddCheckPage: FC = () => {
     const [stat, setStat] = useState(calculateSumAndCount(state.marks))
    
     return (
-        <List style={{marginBottom: 82}}>            
+        <List style={{marginBottom: 82}}>
+            <Placeholder header='Калькулятор отметок' description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на добавленную отметку'/>
             {state.marks.length > 0 &&
             <Section header={'Статистика'}>
                 <Cell
@@ -45,7 +46,7 @@ export const MarkAddCheckPage: FC = () => {
                     after={<Text>{mark}</Text>}>Отметка</Cell>)}
 
             </Section>}
-            { marks.length == 0 && <Placeholder header='Отметок нет' description='Для добавления отметки нажмите на кнопку ниже'/>}
+            { marks.length == 0 && <Placeholder header='Отметок нет'/>}
 
             <Modal
                 header={<ModalHeader>Добавление отметки</ModalHeader>}
@@ -71,13 +72,6 @@ export const MarkAddCheckPage: FC = () => {
                     onClick={() => setModalState(true)}>Добавить отметку
                 </Button>
             </FixedLayout>
-
-            {/* {query.data?.lessons.map((val) => <Cell 
-                    key={val.lesson_name} 
-                    description={"Отметок: " + val.marks.length}
-                    onClick={() => navigate('mark-stat-full', {state: val})}
-                    after={<Text>{calculateAverage(val.marks)}</Text>}>{val.lesson_name}</Cell>
-            )} */}
         </List>
     );
 };

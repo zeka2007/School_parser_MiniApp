@@ -1,4 +1,4 @@
-import { Section, List, Cell, Navigation, IconContainer, Spinner, Accordion, Image, Selectable, ButtonCell, Snackbar, Placeholder, Text, Title } from '@telegram-apps/telegram-ui';
+import { Section, List, Cell, IconContainer, Spinner, Image, Selectable, ButtonCell, Snackbar, Title } from '@telegram-apps/telegram-ui';
 import { useEffect, useState, type FC } from 'react';
 
 import Error from '@mui/icons-material/Error'

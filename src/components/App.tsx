@@ -3,7 +3,8 @@ import {
   bindMiniAppCSSVars,
   bindThemeParamsCSSVars,
   bindViewportCSSVars,
-  initNavigator, useHapticFeedback, useLaunchParams,
+  initHapticFeedback,
+  initNavigator, useLaunchParams,
   useMiniApp,
   usePopup,
   useThemeParams,
@@ -29,7 +30,7 @@ export const App: FC = () => {
   const viewport = useViewport();
 
   const popup = usePopup()
-  const {notificationOccurred} = useHapticFeedback()
+  const {notificationOccurred} = initHapticFeedback()
 
   const queryClient = new QueryClient(
     {

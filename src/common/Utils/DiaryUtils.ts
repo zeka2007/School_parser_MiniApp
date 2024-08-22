@@ -1,7 +1,9 @@
 import axios from "axios"
 import { DiaryCreate, DiaryData } from "../Types"
 import { Popup } from "@tma.js/sdk-react"
-import { Mutation, UseMutationResult } from "react-query"
+import { UseMutationResult } from "react-query"
+import { Quarter } from "../Types/QuarterTypes"
+import { ReportData } from "../Types/DiaryTypes"
 
 export function convertType(type: 'Виртуальный дневник' | 'SCHOOLS.BY'): number {
     switch (type) {
@@ -34,6 +36,13 @@ export const deleteDiaryDialog = async (popup: Popup, mutation: UseMutationResul
     )
 }
 
+export const getQuarterData = async (initDataRaw: string | undefined, params: URLSearchParams): Promise<Quarter[]> => {
+    const {data} = await axios.get(`http://localhost:5000/api/diary/get-quarter/?${params.toString()}`, {headers: {
+      'Authorization': initDataRaw
+    }})
+
+    return data;
+}
 
 export const getDiaries = async (initDataRaw: string | undefined): Promise<DiaryData[]> => {
     const { data } = await axios.get('http://localhost:5000/api/diary/get-all/',
@@ -76,6 +85,18 @@ export async function updateDiary (sendData: any, initDataRaw: string | undefine
             'Authorization': initDataRaw
         }
         }
+    )
+    return data
+}
+
+
+export async function createReport (sendData: ReportData, initDataRaw: string | undefined) {
+    const { data } = await axios.post('http://localhost:5000/api/diary/report/create/', sendData,
+    {
+        headers: {
+        'Authorization': initDataRaw
+        }
+    }
     )
     return data
 }
