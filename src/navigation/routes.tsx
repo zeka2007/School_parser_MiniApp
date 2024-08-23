@@ -3,7 +3,7 @@ import type { ComponentType, JSX } from 'react';
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { LoginPage } from '@/pages/LoginPage/LoginPage';
 import { MarkStatsPage } from '@/pages/MarkStatsPage/MarkStatsPage';
-import { TestPage } from '@/pages/TestPage/TestPage';
+import { SettingsPage } from '@/pages/SettingsPage/SettingsPage';
 import { MarkStatsFullPage } from '@/pages/MarkStatFullPage/MarkStatFullPage';
 import { DiariesPage } from '@/pages/DiariesPage/DiariesPage';
 import { LessonsPage } from '@/pages/LessonsPage/LessonsPage';
@@ -35,5 +35,5 @@ export const routes: Route[] = [
   { path: '/fixes', Component: FixesPage},
   { path: '/quarters', Component: QuartersPage},
   { path: '/report', Component: ReportPage},
-  { path: '/test', Component: TestPage, title: 'test'}
+  { path: '/settings', Component: SettingsPage}
 ];

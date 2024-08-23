@@ -5,27 +5,13 @@ export interface LoginData {
     saveData: boolean
 }
 
-
-export interface DiaryData {
-    type: 'Виртуальный дневник' | 'SCHOOLS.BY',
-    name: string,
-    id: number
-}
-
-export interface DiaryCreate {
-    name: string,
-    extend?: {
-        type: string | null,
-        id: number
-    }
-}
-
 export interface User {
     type: 'Виртуальный дневник' | 'SCHOOLS.BY'
     description: string,
     quarter: number,
     main_now: boolean,
-    diary_id: number
+    diary_id: number,
+    is_login_date_saved?: boolean
 }
 
 export interface Mark {

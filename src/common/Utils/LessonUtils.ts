@@ -22,7 +22,7 @@ export const deleteLessonDialog = async (popup: Popup, mutation: UseMutationResu
 }
 
 export async function deleteLesson (sendData: DeleteLessonData, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/lesson/delete/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/lesson/delete/`, sendData,
         {
         headers: {
             'Authorization': initDataRaw
@@ -35,7 +35,7 @@ export async function deleteLesson (sendData: DeleteLessonData, initDataRaw: str
 
 
 export const getLessons = async (initDataRaw: string | undefined, diary_id: number): Promise<LessonData[]> => {
-    const { data } = await axios.get(`http://localhost:5000/api/lesson/get-all/?diary_id=${diary_id}`,
+    const { data } = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/lesson/get-all/?diary_id=${diary_id}`,
       {
         headers: {
           'Authorization': initDataRaw
@@ -46,7 +46,7 @@ export const getLessons = async (initDataRaw: string | undefined, diary_id: numb
   }
 
 export async function createLesson (sendData: LessonCreate, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/lesson/create/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/lesson/create/`, sendData,
     {
         headers: {
         'Authorization': initDataRaw
@@ -57,7 +57,7 @@ export async function createLesson (sendData: LessonCreate, initDataRaw: string 
 }
 
 export async function updateLesson (sendData: LessonUpdate, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/lesson/update/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/lesson/update/`, sendData,
         {
         headers: {
             'Authorization': initDataRaw

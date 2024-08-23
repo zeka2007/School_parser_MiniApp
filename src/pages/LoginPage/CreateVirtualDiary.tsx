@@ -8,7 +8,7 @@ import {
 } from '@tma.js/sdk-react';
 
 import { useMutation, useQuery } from 'react-query';
-import { DiaryCreate, DiaryData } from '@/common/Types';
+import { DiaryCreate, DiaryData } from '@/common/Types/DiaryTypes';
 import { useNavigate } from 'react-router-dom';
 import { createDiary, getDiaries } from '@/common/Utils/DiaryUtils';
 
@@ -40,7 +40,7 @@ const CreateVirtualDiary: FC = () => {
       })
     }
   
-  const diaries = useQuery('diaries', () => getDiaries(initDataRaw), {retry: true})
+  // const diaries = useQuery('diaries', () => getDiaries(initDataRaw), {retry: true})
   
   const {mutate, isLoading} = useMutation(
     (data: DiaryCreate) => createDiary(data, initDataRaw),
@@ -73,14 +73,14 @@ const CreateVirtualDiary: FC = () => {
           value={ nameValue }
           placeholder='Введите имя для дневника'
           onChange={ (e: React.FormEvent<HTMLInputElement>) => setNameValue(e.currentTarget.value)}/>
-          <Select header='Скопировать из' onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+          {/* <Select header='Скопировать из' onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setOptionValue(e.target.value)
               setOptionType(e.target.options[e.target.selectedIndex].getAttribute('data-type'))
             }
           }>
             <option key={0} value={'no'}>Не копировать</option>
             { diaries.data && diaries.data?.map((el, i) => <option key={i+1} data-type={el.type} value={el.id.toString()}>{`${el.type} (${el.name})`}</option>) }
-          </Select>
+          </Select> */}
        
       </List>
       <FixedLayout style={{padding: 16}}>

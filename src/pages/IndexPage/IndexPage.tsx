@@ -55,7 +55,7 @@ export const IndexPage: FC = () => {
       <Section>
 
         <Cell
-            before={<Image size={40} src={''}><Title style={{color: 'var(--tgui--button_color)'}} weight='2' caps>{data?.user.description[0]}</Title></Image>}
+            before={<Image size={40} src={''}><Title style={{color: 'var(--tgui--button_color)'}} weight='2' caps>{data?.user.type == 'SCHOOLS.BY' ? 'S' : data?.user.description[0]}</Title></Image>}
             after={<Selectable defaultChecked/>}
             subtitle={data?.user.description}>{data?.user.type}</Cell>
         <ButtonCell onClick={() => navigate('/diaries')}>Управление дневниками</ButtonCell>

@@ -1,5 +1,6 @@
 import { StudentData } from "@/common/Types";
-import { deleteDiary, deleteDiaryDialog, updateDiary } from "@/common/Utils/DiaryUtils";
+import { DeleteDiary } from "@/common/Types/DiaryTypes";
+import { deleteDiary, deleteDiaryDialog, deleteDiaryLoginData, deleteDiaryLoginDataDialog, updateDiary } from "@/common/Utils/DiaryUtils";
 import { ButtonCell, Cell, Navigation, Section, Switch } from "@telegram-apps/telegram-ui";
 import { retrieveLaunchParams, usePopup } from "@tma.js/sdk-react";
 import { FC, useState } from "react";
@@ -15,12 +16,20 @@ const ActionsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
     const navigate = useNavigate()
 
     const [checked, setChecked] = useState(data?.user.main_now)
+    const [showDeleteLoginDataBtn, setShowDeleteLoginDataBtn] = useState(true)
 
     const updateMutation = useMutation((diaryData: any) => updateDiary(diaryData, initDataRaw))
     const deleteMutation = useMutation(
-        (diaryData: any) => deleteDiary(diaryData, initDataRaw),
+        (diaryData: DeleteDiary) => deleteDiary(diaryData, initDataRaw),
         {
             onSuccess: () => navigate('/diaries', {replace: true})
+        }
+    )
+
+    const deleteLoginDataMutation = useMutation(
+        (diary_id: number) => deleteDiaryLoginData(diary_id, initDataRaw),
+        {
+            onSuccess: () => setShowDeleteLoginDataBtn(false)
         }
     )
 
@@ -45,18 +54,17 @@ const ActionsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
                             }
                         }/>
                 }>Основной дневник</Cell>
-            <Cell after={<Navigation/>}>Создать копию дневника</Cell>
+            {/* <Cell after={<Navigation/>}>Создать копию дневника</Cell> */}
             {data?.user.type == 'Виртуальный дневник' && <Cell onClick={() => navigate('/lessons', {state: data})} after={<Navigation/>}>Управление предметами</Cell>}
 
             
-            {data?.user.type == 'SCHOOLS.BY' && <ButtonCell mode='destructive'>Удалить логин и пароль</ButtonCell>}
+            {(data?.user.is_login_date_saved && showDeleteLoginDataBtn) && <ButtonCell onClick={() => deleteDiaryLoginDataDialog(popup, deleteLoginDataMutation, data.user.diary_id)} mode='destructive'>Удалить логин и пароль</ButtonCell>}
             <ButtonCell 
                 mode='destructive'
                 onClick={
                     () => {
                         if (data) deleteDiaryDialog(popup, deleteMutation, {
                             type: data.user.type,
-                            name: data.user.description,
                             id: data.user.diary_id
                         })}
                 }>Удалить дневник</ButtonCell>

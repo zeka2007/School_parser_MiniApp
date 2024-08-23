@@ -4,7 +4,7 @@ import {
   bindThemeParamsCSSVars,
   bindViewportCSSVars,
   initHapticFeedback,
-  initNavigator, useLaunchParams,
+  initNavigator, initSettingsButton, useLaunchParams,
   useMiniApp,
   usePopup,
   useThemeParams,
@@ -30,7 +30,9 @@ export const App: FC = () => {
   const viewport = useViewport();
 
   const popup = usePopup()
-  const {notificationOccurred} = initHapticFeedback()
+  const haptic = initHapticFeedback()
+
+  const [settingsButton] = initSettingsButton()
 
   const queryClient = new QueryClient(
     {
@@ -42,12 +44,13 @@ export const App: FC = () => {
         mutations: {
           onError: () => { 
             showErrorDialog(popup);
-            notificationOccurred('error');
+            haptic.notificationOccurred('error');
           }
         }
       }
     }
   );
+
 
   useEffect(() => {
     return bindMiniAppCSSVars(miniApp, themeParams);
@@ -68,6 +71,16 @@ export const App: FC = () => {
 
   // Don't forget to attach the navigator to allow it to control the BackButton state as well
   // as browser history.
+
+  useEffect(() => {
+    if (location.pathname != '/settings') settingsButton.show()
+  }, [location])
+
+
+  useEffect(() => {
+    settingsButton.on('click', () => { settingsButton.hide(); reactNavigator.push('/settings')})
+  }, [])
+
   useEffect(() => {
     navigator.attach();
     return () => navigator.detach();

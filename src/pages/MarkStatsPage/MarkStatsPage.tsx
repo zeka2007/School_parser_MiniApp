@@ -1,4 +1,4 @@
-import {useState, type FC } from 'react';
+import {useMemo, useState, type FC } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { QuaretrChoose } from './QuarterChoose';
 import { StudentData } from '@/common/Types';
@@ -7,7 +7,7 @@ import { useQuery } from 'react-query';
 import { getUserData } from '@/common/Utils/UserUtils';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
 import { convertType } from '@/common/Utils/DiaryUtils';
-import { calculateAverage } from '@/common/Utils/MarksUtils';
+import { calculateAverage, calculateSumAndCount } from '@/common/Utils/MarksUtils';
 
 export const MarkStatsPage: FC = () => {
 
@@ -27,7 +27,7 @@ export const MarkStatsPage: FC = () => {
         params.append('quarter', quarter.toString())
         return getUserData(initDataRaw, params)
     }, {initialData: quarter == state.user.quarter ? state : undefined})
-   
+
     return (
         <List>
             {(title || description) && <Placeholder header={title} description={description}/>}
@@ -38,7 +38,7 @@ export const MarkStatsPage: FC = () => {
 
             {query.data?.lessons.map((val) => <Cell 
                     key={val.lesson_name} 
-                    description={"Отметок: " + val.marks.length}
+                    description={"Отметок: " + calculateSumAndCount(val.marks).length}
                     onClick={() => navigate(navigatePath ? navigatePath : '/', {state: val})}
                     after={<Text>{calculateAverage(val.marks)}</Text>}>{val.lesson_name}</Cell>
             )}

@@ -63,7 +63,7 @@ export function getMarksCount(marks: [Mark[], Mark[], Mark[], Mark[]]): number {
 }
 
 export async function createMark (sendData: MarkCreate, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/mark/create/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/mark/create/`, sendData,
     {
         headers: {
         'Authorization': initDataRaw
@@ -124,7 +124,7 @@ export const deleteOneMarkDialog = async (popup: Popup, mutation: UseMutationRes
 }
 
 export async function deleteMarks (sendData: DeleteMarkData, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/mark/delete/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/mark/delete/`, sendData,
         {
         headers: {
             'Authorization': initDataRaw
@@ -135,7 +135,7 @@ export async function deleteMarks (sendData: DeleteMarkData, initDataRaw: string
 }
 
 export async function updateMark (sendData: UpdateMarkData, initDataRaw: string | undefined) {
-    const { data } = await axios.post('http://localhost:5000/api/mark/update/', sendData,
+    const { data } = await axios.post(`${import.meta.env.VITE_SERVER_HOST}/api/mark/update/`, sendData,
         {
         headers: {
             'Authorization': initDataRaw
@@ -146,7 +146,7 @@ export async function updateMark (sendData: UpdateMarkData, initDataRaw: string 
 }
 
 export const getMarks = async (initDataRaw: string | undefined, params: URLSearchParams): Promise<Mark[]> => {
-    const { data } = await axios.get(`http://localhost:5000/api/mark/get-all/?${params.toString()}`,
+    const { data } = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/mark/get-all/?${params.toString()}`,
       {
         headers: {
           'Authorization': initDataRaw
