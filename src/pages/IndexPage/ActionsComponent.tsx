@@ -1,5 +1,5 @@
-import { StudentData } from "@/common/Types";
 import { DeleteDiary } from "@/common/Types/DiaryTypes";
+import { StudentData } from "@/common/Types/UserTypes";
 import { deleteDiary, deleteDiaryDialog, deleteDiaryLoginData, deleteDiaryLoginDataDialog, updateDiary } from "@/common/Utils/DiaryUtils";
 import { ButtonCell, Cell, Navigation, Section, Switch } from "@telegram-apps/telegram-ui";
 import { retrieveLaunchParams, usePopup } from "@tma.js/sdk-react";

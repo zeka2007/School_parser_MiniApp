@@ -1,7 +1,5 @@
-
 import {useMemo, useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { StudentData } from '@/common/Types';
 import { Cell, List, Placeholder, Text} from '@telegram-apps/telegram-ui';
 import { useQuery } from 'react-query';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
@@ -10,6 +8,7 @@ import { QuaretrChoose } from '../MarkStatsPage/QuarterChoose';
 
 import './style.css'
 import { QuarterCompare } from '@/common/Types/QuarterTypes';
+import { StudentData } from '@/common/Types/UserTypes';
 
 export const QuartersPage: FC = () => {
 

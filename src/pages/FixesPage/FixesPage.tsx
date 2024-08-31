@@ -1,9 +1,9 @@
 import { useMemo, useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Lesson } from '@/common/Types';
 import { Cell, Text, List, Placeholder, Section, Select} from '@telegram-apps/telegram-ui';
 import { calculateSumAndCount } from '@/common/Utils/MarksUtils';
 import { FixMark } from '@/common/Types/MarkTypes';
+import { Lesson } from '@/common/Types/LessonTypes';
 
 
 export const FixesPage: FC = () => {

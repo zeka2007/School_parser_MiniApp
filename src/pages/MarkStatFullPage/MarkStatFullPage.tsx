@@ -1,9 +1,9 @@
-import { Lesson, StudentData, TransferData } from '@/common/Types';
+import { Lesson } from '@/common/Types/LessonTypes';
 import { calculateAverage, getMarkString, getMarksList } from '@/common/Utils/MarksUtils';
 import { getWeekDay } from '@/common/Utils/Utils'
 import { FlagOutlined, StarOutline, VerticalAlignBottom, VerticalAlignTop } from '@mui/icons-material';
-import { Accordion, Cell, IconContainer, LargeTitle, List, Placeholder, Section, Selectable, Spinner, Text } from '@telegram-apps/telegram-ui';
-import { useState, type FC } from 'react';
+import { Cell, IconContainer, LargeTitle, List, Placeholder, Section, Text } from '@telegram-apps/telegram-ui';
+import { type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export const MarkStatsFullPage: FC = () => {

@@ -1,11 +1,11 @@
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Lesson } from '@/common/Types';
 import { Button, Cell, Chip, FixedLayout, IconContainer, List, Modal, Placeholder, Section, Text} from '@telegram-apps/telegram-ui';
 import { usePopup } from '@tma.js/sdk-react';
 import { calculateSumAndCount, showDeleteTemporaryMarkDialog } from '@/common/Utils/MarksUtils';
 import { AddCircleOutline, FlagOutlined, StarOutline } from '@mui/icons-material';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
+import { Lesson } from '@/common/Types/LessonTypes';
 
 export const MarkAddCheckPage: FC = () => {
 

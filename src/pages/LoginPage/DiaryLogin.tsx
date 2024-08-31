@@ -7,21 +7,11 @@ import {
   usePopup,
 } from '@tma.js/sdk-react';
 
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { useMutation } from 'react-query';
-import { LoginData } from '@/common/Types';
 import { useNavigate } from 'react-router-dom';
-
-async function sendData (loginData: LoginData, initDataRaw: string | undefined): Promise<{ id: number; }> {
-  const {data} = await axios.post('http://localhost:5000/api/user/login/', loginData,
-    {
-      headers: {
-        'Authorization': initDataRaw
-      }
-    }
-  )
-  return data
-}
+import { LoginData } from '@/common/Types/LoginTypes';
+import { LoginUser } from '@/common/Utils/LoginUtils';
 
 const DiaryLogin: FC = () => {
 
@@ -66,7 +56,7 @@ const DiaryLogin: FC = () => {
   
 
   const {mutate, isLoading} = useMutation(
-    (loginData: LoginData) => sendData(loginData, initDataRaw),
+    (loginData: LoginData) => LoginUser(loginData, initDataRaw),
     {
       onError: onError,
       onSuccess: (responce) => {

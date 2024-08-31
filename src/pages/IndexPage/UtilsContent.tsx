@@ -1,4 +1,4 @@
-import { StudentData } from "@/common/Types";
+import { StudentData } from "@/common/Types/UserTypes";
 import { Cell, Navigation, Section } from "@telegram-apps/telegram-ui";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";

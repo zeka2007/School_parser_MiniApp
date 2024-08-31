@@ -23,3 +23,13 @@ export interface FixMark {
     mark: number
     count: number
 }
+
+export interface Mark {
+    first_value: number | null,
+    second_value: number | null,
+    display_value: string | null,
+    attached_to_lesson: number,
+    date: string,
+    _id: number,
+}
+

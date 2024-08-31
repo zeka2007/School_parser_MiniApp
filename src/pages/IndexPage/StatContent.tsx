@@ -1,4 +1,4 @@
-import { StudentData } from "@/common/Types";
+import { StudentData } from "@/common/Types/UserTypes";
 import { getBestLesson } from "@/common/Utils/MarksUtils";
 import { BookmarksOutlined, FlagOutlined, StarOutline } from "@mui/icons-material";
 import { Cell, IconContainer } from "@telegram-apps/telegram-ui";

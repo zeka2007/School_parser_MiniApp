@@ -1,6 +1,6 @@
 import { List, Placeholder, Select } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DiaryLogin from './DiaryLogin';
 import CreateVirtualDiary from './CreateVirtualDiary';
 

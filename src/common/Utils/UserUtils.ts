@@ -1,7 +1,7 @@
 import axios from "axios";
-import { StudentData } from "../Types";
 import { Popup } from "@tma.js/sdk-react";
 import { UseMutationResult } from "react-query";
+import { StudentData } from "../Types/UserTypes";
 
 export const getUserData = async (initDataRaw: string | undefined, params: URLSearchParams): Promise<StudentData> => {
     const {data} = await axios.get(`${import.meta.env.VITE_SERVER_HOST}/api/user/get-data/?${params.toString()}`, {headers: {

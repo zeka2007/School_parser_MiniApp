@@ -1,4 +1,4 @@
-import { StudentData } from '@/common/Types';
+import { StudentData } from '@/common/Types/UserTypes';
 import { Accordion, Cell, Selectable, Spinner } from '@telegram-apps/telegram-ui';
 import { AccordionContent } from '@telegram-apps/telegram-ui/dist/components/Blocks/Accordion/components/AccordionContent/AccordionContent';
 import { AccordionSummary } from '@telegram-apps/telegram-ui/dist/components/Blocks/Accordion/components/AccordionSummary/AccordionSummary';

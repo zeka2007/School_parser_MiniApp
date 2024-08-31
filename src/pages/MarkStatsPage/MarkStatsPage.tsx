@@ -1,13 +1,13 @@
-import {useMemo, useState, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { QuaretrChoose } from './QuarterChoose';
-import { StudentData } from '@/common/Types';
 import { Cell, List, Placeholder, Text} from '@telegram-apps/telegram-ui';
 import { useQuery } from 'react-query';
 import { getUserData } from '@/common/Utils/UserUtils';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
 import { convertType } from '@/common/Utils/DiaryUtils';
 import { calculateAverage, calculateSumAndCount } from '@/common/Utils/MarksUtils';
+import { StudentData } from '@/common/Types/UserTypes';
 
 export const MarkStatsPage: FC = () => {
 

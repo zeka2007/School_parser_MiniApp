@@ -1,16 +1,18 @@
-import { List, Cell, Input, Switch, Text, Tooltip, FixedLayout, Button, Select } from '@telegram-apps/telegram-ui';
+import { List, Input, FixedLayout, Button } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   retrieveLaunchParams,
   useHapticFeedback,
   usePopup,
 } from '@tma.js/sdk-react';
 
-import { useMutation, useQuery } from 'react-query';
-import { DiaryCreate, DiaryData } from '@/common/Types/DiaryTypes';
+import { useMutation } from 'react-query';
+import { DiaryCreate } from '@/common/Types/DiaryTypes';
 import { useNavigate } from 'react-router-dom';
-import { createDiary, getDiaries } from '@/common/Utils/DiaryUtils';
+import { createDiary } from '@/common/Utils/DiaryUtils';
+import { AxiosError } from 'axios';
+import { showErrorDialog } from '@/common/Utils/Utils';
 
 const CreateVirtualDiary: FC = () => {
 
@@ -20,24 +22,25 @@ const CreateVirtualDiary: FC = () => {
 
 
   const [nameValue, setNameValue] = useState("");
-  const [optionValue, setOptionValue] = useState("");
-  const [optionType, setOptionType] = useState<string | null>("");
+  // const [optionValue, setOptionValue] = useState("");
+  // const [optionType, setOptionType] = useState<string | null>("");
 
   const [isDisabled, setDisabled] = useState(false);
 
   const haptic = useHapticFeedback()
   const popup = usePopup();
 
-  const onError = () => {
+  const onError = (error: AxiosError) => {
+      if (error.response?.status == 409) {
+        popup.open(
+          {
+            title: 'Произошла ошибка',
+            message: 'Дневник с таким именем уже существует'
+          }
+        )
+      }
+      else showErrorDialog(popup)
       haptic.notificationOccurred('error')
-      popup.open({
-        title: 'Ошибка сервера',
-        message: 'Произошла неизвестная ошибка, попробуйте повторить попытку позже.',
-        buttons: [{
-          id: 'ok',
-          type: 'ok'
-        }]
-      })
     }
   
   // const diaries = useQuery('diaries', () => getDiaries(initDataRaw), {retry: true})
@@ -91,10 +94,10 @@ const CreateVirtualDiary: FC = () => {
           disabled={isLoading || isDisabled}
           onClick={() => {
             let extend;
-            if (optionValue != 'no') extend = {
-              type: optionType,
-              id: Number(optionValue)
-            }
+            // if (optionValue != 'no') extend = {
+            //   type: optionType,
+            //   id: Number(optionValue)
+            // }
             mutate(
             {
               name: nameValue,

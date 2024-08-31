@@ -6,9 +6,8 @@ import MarkChipSlash from '@/components/TG/MarkChip/MarkChipSlash';
 import { createMark, deleteMarks, deleteOneMarkDialog, marksList, updateMark } from '@/common/Utils/MarksUtils';
 import { useMutation } from 'react-query';
 import { retrieveLaunchParams, usePopup } from '@tma.js/sdk-react';
-import { DeleteMarkData, MarkCreate, UpdateMarkData } from '@/common/Types/MarkTypes';
+import { DeleteMarkData, Mark, MarkCreate, UpdateMarkData } from '@/common/Types/MarkTypes';
 import { LessonData } from '@/common/Types/LessonTypes';
-import { Mark } from '@/common/Types';
 
 
 

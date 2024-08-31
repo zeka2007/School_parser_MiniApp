@@ -1,4 +1,14 @@
-import { Mark } from "../Types"
+import { Mark } from "./MarkTypes"
+
+export interface Lesson {
+    lesson_name: string,
+    marks: Mark[]
+}
+
+export interface BestLesson {
+    lesson: string, 
+    average_mark: number
+}
 
 export interface LessonUpdate {
     id: number

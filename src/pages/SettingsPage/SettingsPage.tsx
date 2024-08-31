@@ -1,8 +1,8 @@
 import { deleteAllDiaries, deleteAllDiariesDialog, getDiaries, getMainDiary, updateDiary } from '@/common/Utils/DiaryUtils';
 import { deleteUser, deleteUserDialog } from '@/common/Utils/UserUtils';
-import { Avatar, ButtonCell, Cell, Image, List, Modal, Navigation, Section, Selectable, Skeleton, Title } from '@telegram-apps/telegram-ui';
+import { ButtonCell, Cell, Image, List, Modal, Navigation, Section, Selectable, Skeleton, Title } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-import { initInitData, initUtils, retrieveLaunchParams, useInitData, useMiniApp, usePopup } from '@tma.js/sdk-react';
+import { retrieveLaunchParams, useInitData, useMiniApp, usePopup } from '@tma.js/sdk-react';
 import { useState, type FC } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';

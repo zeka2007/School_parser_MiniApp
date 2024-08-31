@@ -1,9 +1,9 @@
-import { Lesson, StudentData } from '@/common/Types';
 import { DeleteLessonData, LessonData, LessonUpdate } from '@/common/Types/LessonTypes';
 import { DeleteMarkData } from '@/common/Types/MarkTypes';
+import { StudentData } from '@/common/Types/UserTypes';
 import { deleteLesson, deleteLessonDialog, updateLesson } from '@/common/Utils/LessonUtils';
-import { deleteLessonMarksDialog, deleteMarks, getMarkString, getMarksCount } from '@/common/Utils/MarksUtils';
-import { Button, ButtonCell, Cell, FixedLayout, Input, List, Text, Navigation, Placeholder, Section, Banner } from '@telegram-apps/telegram-ui';
+import { deleteLessonMarksDialog, deleteMarks, getMarksCount } from '@/common/Utils/MarksUtils';
+import { Button, ButtonCell, Cell, FixedLayout, Input, List, Navigation, Section } from '@telegram-apps/telegram-ui';
 import { retrieveLaunchParams, usePopup } from '@tma.js/sdk-react';
 import { useState, type FC } from 'react';
 import { useMutation } from 'react-query';

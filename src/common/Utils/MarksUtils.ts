@@ -1,8 +1,8 @@
 import axios from "axios";
-import { BestLesson, Lesson, Mark } from "../Types";
-import { DeleteMarkData, MarkCreate, UpdateMarkData } from "../Types/MarkTypes";
+import { DeleteMarkData, Mark, MarkCreate, UpdateMarkData } from "../Types/MarkTypes";
 import { Popup } from "@tma.js/sdk-react";
 import { UseMutationResult } from "react-query";
+import { BestLesson, Lesson } from "../Types/LessonTypes";
 
 export const marksList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'н.', 'осв.']
 

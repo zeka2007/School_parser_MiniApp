@@ -1,13 +1,13 @@
-import { StudentData } from '@/common/Types';
 import { LessonCreate, LessonData } from '@/common/Types/LessonTypes';
+import { StudentData } from '@/common/Types/UserTypes';
 import { createLesson, getLessons } from '@/common/Utils/LessonUtils';
-import { getRandomString } from '@/common/Utils/Utils';
+import { showErrorDialog } from '@/common/Utils/Utils';
 import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Skeleton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-import { retrieveLaunchParams } from '@tma.js/sdk-react';
+import { retrieveLaunchParams, useHapticFeedback, usePopup } from '@tma.js/sdk-react';
 import { AxiosError } from 'axios';
 import { useState, type FC } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
@@ -25,7 +25,28 @@ export const LessonsPage: FC = () => {
     retry: true
   })
 
-  const createMutation = useMutation((lessonData: LessonCreate) => createLesson(lessonData, initDataRaw))
+  const popup = usePopup()
+  const haptic = useHapticFeedback()
+
+  const onError = (error: AxiosError) => {
+    if (error.response?.status == 409) {
+      popup.open(
+        {
+          title: 'Произошла ошибка',
+          message: 'Предмет с таким именем уже существует'
+        }
+      )
+    }
+    else showErrorDialog(popup)
+    haptic.notificationOccurred('error')
+  }
+
+  const createMutation = useMutation(
+    (lessonData: LessonCreate) => createLesson(lessonData, initDataRaw),
+    {
+      onError: onError
+    }
+  )
 
   return (
     <div>
@@ -62,7 +83,9 @@ export const LessonsPage: FC = () => {
                 createMutation.mutate({
                   diary_id: userData.user.diary_id,
                   name: name
-                }, {onSuccess: () => setModalState(false)})
+                }, {
+                  onSuccess: () => setModalState(false)
+                })
               }} loading={createMutation.isLoading} disabled={name.trim().length === 0} size="l" stretched>Добавить</Button>
             </div>
         </List>

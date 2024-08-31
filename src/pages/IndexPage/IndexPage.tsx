@@ -6,7 +6,6 @@ import Error from '@mui/icons-material/Error'
 import './IndexPage.css'
 import { AxiosError } from 'axios';
 import {retrieveLaunchParams} from '@tma.js/sdk-react';
-import { StudentData } from '@/common/Types';
 
 import StatContent from './StatContent';
 import UtilsComponent from './UtilsContent';
@@ -14,6 +13,7 @@ import ActionsComponent from './ActionsComponent';
 import { useQuery } from 'react-query';
 import {  useNavigate, useSearchParams } from 'react-router-dom';
 import { getUserData } from '@/common/Utils/UserUtils';
+import { StudentData } from '@/common/Types/UserTypes';
 
 
 export const IndexPage: FC = () => {
@@ -72,8 +72,6 @@ export const IndexPage: FC = () => {
       
       {showNotification && <Snackbar 
         before={<IconContainer><Error/></IconContainer>}
-        description='Доступны только виртуальные дневники'
-
         onClose={() => {setShowNotification(false)}}>Произошла ошибка</Snackbar>}
       </List>
   );

@@ -1,6 +1,5 @@
 import { useState, type FC } from 'react';
 import { QuaretrChoose } from '../MarkStatsPage/QuarterChoose';
-import { Mark, StudentData } from '@/common/Types';
 import { useLocation } from 'react-router-dom';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
 import { useQuery } from 'react-query';
@@ -10,6 +9,8 @@ import { LessonData } from '@/common/Types/LessonTypes';
 import { getWeekDay } from '@/common/Utils/Utils';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { AddMark } from './AddMark';
+import { StudentData } from '@/common/Types/UserTypes';
+import { Mark } from '@/common/Types/MarkTypes';
 
 
 
