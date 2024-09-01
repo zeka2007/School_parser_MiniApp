@@ -17,9 +17,10 @@ export interface DeleteDiary {
 }
 
 export interface DiaryCreate {
-    name: string,
+    name: string
+    createLessons: boolean
     extend?: {
-        type: string | null,
+        type: string | null
         id: number
     }
 }

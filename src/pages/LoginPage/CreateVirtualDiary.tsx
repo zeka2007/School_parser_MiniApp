@@ -1,4 +1,4 @@
-import { List, Input, FixedLayout, Button } from '@telegram-apps/telegram-ui';
+import { List, Input, FixedLayout, Button, Cell, Switch } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import {
@@ -26,6 +26,7 @@ const CreateVirtualDiary: FC = () => {
   // const [optionType, setOptionType] = useState<string | null>("");
 
   const [isDisabled, setDisabled] = useState(false);
+  const [createDefaultLessons, setCreateDefaultLessons] = useState(true)
 
   const haptic = useHapticFeedback()
   const popup = usePopup();
@@ -57,7 +58,7 @@ const CreateVirtualDiary: FC = () => {
   )
 
   React.useEffect(() => {
-    if (nameValue === "") {
+    if (nameValue.trim() === '') {
       setDisabled(true)
     }
     else {
@@ -84,6 +85,7 @@ const CreateVirtualDiary: FC = () => {
             <option key={0} value={'no'}>Не копировать</option>
             { diaries.data && diaries.data?.map((el, i) => <option key={i+1} data-type={el.type} value={el.id.toString()}>{`${el.type} (${el.name})`}</option>) }
           </Select> */}
+          <Cell Component='label' after={<Switch checked={createDefaultLessons} onChange={(e) => setCreateDefaultLessons(e.target.checked)}/>}>Заполнить дневник учебными предметами</Cell>
        
       </List>
       <FixedLayout style={{padding: 16}}>
@@ -101,7 +103,8 @@ const CreateVirtualDiary: FC = () => {
             mutate(
             {
               name: nameValue,
-              extend: extend
+              createLessons: createDefaultLessons,
+              extend: extend,
             }
           )}}
           >
