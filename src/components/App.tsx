@@ -93,6 +93,7 @@ export const App: FC = () => {
       <AppRoot
         appearance={miniApp.isDark ? 'dark' : 'light'}
         platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
+        // platform='ios'
       >
           <Router location={location} navigator={reactNavigator}>
             <Routes>

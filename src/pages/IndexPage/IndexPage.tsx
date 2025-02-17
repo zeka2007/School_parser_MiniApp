@@ -1,78 +1,50 @@
-import { Section, List, Cell, IconContainer, Spinner, Image, Selectable, ButtonCell, Snackbar, Title } from '@telegram-apps/telegram-ui';
-import { useEffect, useState, type FC } from 'react';
+import { List } from '@telegram-apps/telegram-ui';
+import { type FC } from 'react';
 
-import Error from '@mui/icons-material/Error'
 
 import './IndexPage.css'
-import { AxiosError } from 'axios';
-import {retrieveLaunchParams} from '@tma.js/sdk-react';
 
-import StatContent from './StatContent';
+import {  useNavigate } from 'react-router-dom';
 import UtilsComponent from './UtilsContent';
 import ActionsComponent from './ActionsComponent';
-import { useQuery } from 'react-query';
-import {  useNavigate, useSearchParams } from 'react-router-dom';
-import { getUserData } from '@/common/Utils/UserUtils';
-import { StudentData } from '@/common/Types/UserTypes';
+import StatContent from './StatContent';
 
+import { useCloudStorage } from '@tma.js/sdk-react';
+import { HeaderContent } from './HeaderContent';
+import { Lesson } from '@/common/Types/LessonTypes';
 
 export const IndexPage: FC = () => {
 
-  const { initDataRaw } = retrieveLaunchParams();
-  const [showNotification, setShowNotification] = useState(false)
+ 
   const navigate = useNavigate()
 
-  const [searchParams] = useSearchParams()
+  const cloudStorage = useCloudStorage();
 
-  const { data, error, isLoading, isError} = useQuery<StudentData, AxiosError>('user', () => {
-    let params = new URLSearchParams()
-    const type = searchParams.get('type')
-    const id = searchParams.get('id')
-    if ( type && id ) {
-      params.append('type', type)
-      params.append('id', id)
-    }
-    return getUserData(initDataRaw, params)
-  }, {keepPreviousData: true})
-
-  useEffect(() => setShowNotification(isError), [isError])
-
-  if (isLoading) {
-      return <div id='loading-spinner'><Spinner size='l'/></div>
+  const readData = async () => { 
+    console.log(await cloudStorage.getKeys())
   }
 
-  if (error && error.response?.status == 404) navigate('/diaries', {replace: true})
 
-  else return (
-    <List style={{
-      height: '100vh',
-      background: 'var(--tgui--secondary_bg_color)',
+  const lessons: Lesson[] = [
+    {
+      lesson_name: 'lesson 1',
+      marks: ['8', '9/10']
+    }
+  ]
+  
 
-      maxWidth: '100%',
-      margin: 'auto',
-    }}>
+  readData();
+  
+  return (
+        
+      <List className='list'>
+        <HeaderContent marks={[8, 9, 10]}></HeaderContent>
+        {lessons.length > 0 && <StatContent lessons={lessons}/>}
+        <UtilsComponent lessons={lessons}/>
 
-      <Section>
-
-        <Cell
-            before={<Image size={40} src={''}><Title style={{color: 'var(--tgui--button_color)'}} weight='2' caps>{data?.user.type == 'SCHOOLS.BY' ? 'S' : data?.user.description[0]}</Title></Image>}
-            after={<Selectable defaultChecked/>}
-            subtitle={data?.user.description}>{data?.user.type}</Cell>
-        <ButtonCell onClick={() => navigate('/diaries')}>Управление дневниками</ButtonCell>
-
-      </Section>
-
+        <ActionsComponent lessons={lessons}/>
       
-      {data?.lessons && data?.lessons.length > 0 &&
-        <Section header={'Статистика четверти'}><StatContent data={data}/></Section>}
-      
-      <UtilsComponent data={data}/>
-
-      <ActionsComponent data={data}/>
-      
-      {showNotification && <Snackbar 
-        before={<IconContainer><Error/></IconContainer>}
-        onClose={() => {setShowNotification(false)}}>Произошла ошибка</Snackbar>}
       </List>
+    
   );
 };

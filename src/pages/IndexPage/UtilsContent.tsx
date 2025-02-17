@@ -1,10 +1,10 @@
-import { StudentData } from "@/common/Types/UserTypes";
+import { Lesson } from "@/common/Types/LessonTypes";
 import { Cell, Navigation, Section } from "@telegram-apps/telegram-ui";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
 
-const UtilsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
+const UtilsComponent: FC<{lessons: Lesson[] }> = ({lessons}) => {
 
     const navigate = useNavigate()
 
@@ -14,7 +14,7 @@ const UtilsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
         params.append('navto', lessonPath)
         if (title) params.append('title', title)
         if (description) params.append('description', description)
-        navigate('/mark-stat?' + params.toString(), {state: data})
+        navigate('/mark-stat?' + params.toString(), {state: lessons})
     }
 
     return (
@@ -23,9 +23,7 @@ const UtilsComponent: FC<{data: StudentData | undefined}> = ({data}) => {
                 after={<Navigation/>} 
                 onClick={() => navToStatPage('mark-stat-full', 'Анализ отметок', 'Для получения подробной информации нажмите на предмет')}>Анализ отметок</Cell>
             <Cell onClick={() => navToStatPage('fixes', 'Способы исправления', 'Для получения советов по исправлению отметки нажмите на предмет')} after={<Navigation/>} >Способы исправления</Cell>
-            <Cell onClick={() => navigate('/quarters', {state: data})} after={<Navigation/>}>Анализ четвертей</Cell>
             <Cell onClick={() => navToStatPage('mark-add-check', 'Калкулятор отметок', 'Для ввода отметок нажмите на предмет')} after={<Navigation/>}>Калькулятор отметок</Cell>
-            <Cell onClick={() => navigate('/report', {state: data})} after={<Navigation/>}>Экспорт данных</Cell>
             
         </Section>
     )

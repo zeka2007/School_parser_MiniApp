@@ -1,40 +1,22 @@
-import { DeleteLessonData, LessonData, LessonUpdate } from '@/common/Types/LessonTypes';
-import { DeleteMarkData } from '@/common/Types/MarkTypes';
-import { StudentData } from '@/common/Types/UserTypes';
-import { deleteLesson, deleteLessonDialog, updateLesson } from '@/common/Utils/LessonUtils';
-import { deleteLessonMarksDialog, deleteMarks, getMarksCount } from '@/common/Utils/MarksUtils';
-import { Button, ButtonCell, Cell, FixedLayout, Input, List, Navigation, Section } from '@telegram-apps/telegram-ui';
+import { Lesson } from '@/common/Types/LessonTypes';
+import { ButtonCell, Cell, Input, List, Navigation, Section } from '@telegram-apps/telegram-ui';
 import { retrieveLaunchParams, usePopup } from '@tma.js/sdk-react';
 import { useState, type FC } from 'react';
-import { useMutation } from 'react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
 
 export const LessonsEditPage: FC = () => {
 
-  const data: {lesson: LessonData, data: StudentData} = useLocation().state
+  const lesson: Lesson = useLocation().state
   const { initDataRaw } = retrieveLaunchParams();
 
   const popup = usePopup()
 
   const navigate = useNavigate()
 
-  const updateMutation = useMutation((diaryData: LessonUpdate) => updateLesson(diaryData, initDataRaw))
-  const deleteMutation = useMutation(
-    (deleteData: DeleteLessonData) => deleteLesson(deleteData, initDataRaw),
-      {
-          onSuccess: () => navigate(-1)
-      }
-  )
-  const deleteMarksMutation = useMutation(
-    (deleteData: DeleteMarkData) => deleteMarks(deleteData, initDataRaw),
-      {
-          onSuccess: () => navigate(-1)
-      }
-  )
 
-  const [name, setName] = useState(data.lesson.name)
+  const [name, setName] = useState(lesson.lesson_name)
 
   return (
     <div>
@@ -44,23 +26,13 @@ export const LessonsEditPage: FC = () => {
 
         </Section>
         <Section header='Действия'>
-          <Cell after={<Navigation/>} onClick={() => navigate('/marks', {state: data})}>Управление отметками</Cell>
-          <ButtonCell mode='destructive' onClick={() => {
-              deleteLessonMarksDialog(popup, deleteMarksMutation, {
-                lesson_id: data.lesson.id,
-                diary_id: data.lesson.attached_to_diary
-            }, getMarksCount(data.lesson.marks))
-          }}>Стереть все отметки</ButtonCell>
-          <ButtonCell onClick={() => {
-              deleteLessonDialog(popup, deleteMutation, {
-                id: data.lesson.id,
-                diary_id: data.lesson.attached_to_diary
-            })
-          }} mode='destructive'>Удалить предмет</ButtonCell>
+          <Cell after={<Navigation/>} onClick={() => navigate('/marks', {state: lesson})}>Управление отметками</Cell>
+          <ButtonCell mode='destructive' onClick={() => {}}>Стереть все отметки</ButtonCell>
+          <ButtonCell onClick={() => {}} mode='destructive'>Удалить предмет</ButtonCell>
         </Section>
       </List>
       
-      <FixedLayout style={{padding: 16}}>
+      {/* <FixedLayout style={{padding: 16}}>
           <Button 
             size="l" 
             disabled={data.lesson.name == name || name.trim() == ''} 
@@ -76,7 +48,7 @@ export const LessonsEditPage: FC = () => {
                 }
             )
             }}>Сохранить</Button>
-      </FixedLayout>
+      </FixedLayout> */}
     </div>
   );
 };

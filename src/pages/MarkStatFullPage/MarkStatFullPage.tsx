@@ -1,8 +1,7 @@
 import { Lesson } from '@/common/Types/LessonTypes';
-import { calculateAverage, getMarkString, getMarksList } from '@/common/Utils/MarksUtils';
-import { getWeekDay } from '@/common/Utils/Utils'
+import { calculateAverage, getMarksList } from '@/common/Utils/MarksUtils';
 import { FlagOutlined, StarOutline, VerticalAlignBottom, VerticalAlignTop } from '@mui/icons-material';
-import { Cell, IconContainer, LargeTitle, List, Placeholder, Section, Text } from '@telegram-apps/telegram-ui';
+import { Cell, IconContainer, LargeTitle, List, Placeholder, Section } from '@telegram-apps/telegram-ui';
 import { type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ export const MarkStatsFullPage: FC = () => {
             <Section header='Статистика предмета'>
                 <Cell
                     before={<IconContainer><StarOutline fontSize="large"/></IconContainer>}
-                    subtitle={calculateAverage(lesson.marks)}>Средний бал</Cell>
+                    subtitle={calculateAverage(marks_list)}>Средний бал</Cell>
                 <Cell
                     before={<IconContainer><VerticalAlignBottom fontSize="large"/></IconContainer>}
                     subtitle={Math.min(...marks_list)}>Худшая отметка</Cell>
@@ -31,11 +30,11 @@ export const MarkStatsFullPage: FC = () => {
                     subtitle={marks_list.length}>Количество отметок</Cell>
                 
             </Section>
-            <Section header='Даты выставления отметок'>
+            {/* <Section header='Даты выставления отметок'>
                 {lesson.marks.map((mark, index) =>
                     <Cell key={index} description={mark.date} after={<Text>{getMarkString(mark)}</Text> }>{getWeekDay(new Date(mark.date))}</Cell>
                 )}
-            </Section>
+            </Section> */}
         </List>
     );
 };

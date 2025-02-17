@@ -1,7 +1,7 @@
 import { useMemo, useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Cell, Text, List, Placeholder, Section, Select} from '@telegram-apps/telegram-ui';
-import { calculateSumAndCount } from '@/common/Utils/MarksUtils';
+import { calculateSum, getMarksList } from '@/common/Utils/MarksUtils';
 import { FixMark } from '@/common/Types/MarkTypes';
 import { Lesson } from '@/common/Types/LessonTypes';
 
@@ -9,8 +9,9 @@ import { Lesson } from '@/common/Types/LessonTypes';
 export const FixesPage: FC = () => {
 
     const lesson: Lesson = useLocation().state;
-    const stat = calculateSumAndCount(lesson.marks)
-    const roundedMark = Math.round(stat.sum / stat.length)
+    const marks = getMarksList(lesson.marks)
+    const marksSum = calculateSum(marks)
+    const roundedMark = Math.round(marksSum / marks.length)
     const [aimMark, setAimMark] = useState(roundedMark < 10 ? roundedMark + 1 : 10)
 
     const result = useMemo(() => {
@@ -18,8 +19,8 @@ export const FixesPage: FC = () => {
         let count = 0
 
         let startMark = aimMark;
-        let length = stat.length;
-        let sum = stat.sum;
+        let length = marks.length;
+        let sum = marksSum;
         if (startMark <= roundedMark) return fixedList
         while (true) {
             sum += startMark
@@ -30,8 +31,8 @@ export const FixesPage: FC = () => {
                 if (startMark == 10) break
                 count = 0;
                 startMark++;
-                length = stat.length;
-                sum = stat.sum;
+                length = marks.length;
+                sum = marksSum;
             }
         }
         return fixedList

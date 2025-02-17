@@ -2,35 +2,34 @@ import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Button, Cell, Chip, FixedLayout, IconContainer, List, Modal, Placeholder, Section, Text} from '@telegram-apps/telegram-ui';
 import { usePopup } from '@tma.js/sdk-react';
-import { calculateSumAndCount, showDeleteTemporaryMarkDialog } from '@/common/Utils/MarksUtils';
+import { calculateAverage, getMarksList, showDeleteTemporaryMarkDialog } from '@/common/Utils/MarksUtils';
 import { AddCircleOutline, FlagOutlined, StarOutline } from '@mui/icons-material';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { Lesson } from '@/common/Types/LessonTypes';
 
 export const MarkAddCheckPage: FC = () => {
 
-    const state: Lesson = useLocation().state;
+    const lesson: Lesson = useLocation().state;
+    const marks_list = getMarksList(lesson.marks)
     const popup = usePopup();
     const [modalState, setModalState] = useState(false)
 
     const [marks, setMarks] = useState<number[]>([]);
-
-    const [stat, setStat] = useState(calculateSumAndCount(state.marks))
    
     return (
         <List style={{marginBottom: 82}}>
             <Placeholder header='Калькулятор отметок' description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на добавленную отметку'/>
-            {state.marks.length > 0 &&
+            {marks_list.length > 0 &&
             <Section header={'Статистика'}>
                 <Cell
                     before={<IconContainer><StarOutline fontSize="large"/></IconContainer>}
-                    subtitle={(stat.sum / stat.length).toFixed(2)}>Средний бал</Cell>
+                    subtitle={calculateAverage(marks.concat(marks_list))}>Средний бал</Cell>
                     <Cell
                         before={<IconContainer><FlagOutlined fontSize="large"/></IconContainer>}
-                        subtitle={stat.length}>Количество отметок</Cell>
+                        subtitle={marks_list.length}>Количество отметок</Cell>
                     <Cell
                         before={<IconContainer><AddCircleOutline fontSize='large'/></IconContainer>}
-                        subtitle={marks?.length}>Добавлено отметок</Cell>
+                        subtitle={marks.length}>Добавлено отметок</Cell>
             </Section>}
 
             { marks.length != 0 && <Section header='Добавленные отметки'>
@@ -39,14 +38,13 @@ export const MarkAddCheckPage: FC = () => {
                     onClick={() => showDeleteTemporaryMarkDialog(popup, () => {
                             let newMarks = marks;
                             newMarks.splice(i, 1)
-                            setStat({sum: stat.sum - mark, length: stat.length - 1})
                             setMarks(newMarks);
                         }
                     )} 
                     after={<Text>{mark}</Text>}>Отметка</Cell>)}
 
             </Section>}
-            { marks.length == 0 && <Placeholder header='Отметок нет'/>}
+            { marks_list.length == 0 && <Placeholder header='Отметок нет'/>}
 
             <Modal
                 header={<ModalHeader>Добавление отметки</ModalHeader>}
@@ -58,7 +56,6 @@ export const MarkAddCheckPage: FC = () => {
                     { [...Array(10)].map((_, i) => <Chip 
                         onClick={ () => {
                             setMarks([...marks, i + 1]); 
-                            setStat({sum: stat.sum + i + 1, length: stat.length + 1})
                             setModalState(false)}} style={{margin: 8}
                         } 
                         key={i}>{i + 1}</Chip>)}

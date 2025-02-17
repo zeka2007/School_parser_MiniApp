@@ -1,35 +1,12 @@
-export interface MarkCreate {
-    first_value?: number | null
-    second_value?: number | null
-    display_value?: string | null
-    quarter: number
-    diary_id: number
-    attached_to_lesson: number
-    date: string
+export interface SingleMark {
+    value: number
 }
 
-export interface UpdateMarkData {
-    id: number
-    data: MarkCreate
+export interface SplitMark {
+    first_value: number 
+    second_value: number
 }
-
-export interface DeleteMarkData {
-    diary_id: number
-    lesson_id: number
-    mark_ids?: number[]
-}
-
 export interface FixMark {
     mark: number
     count: number
 }
-
-export interface Mark {
-    first_value: number | null,
-    second_value: number | null,
-    display_value: string | null,
-    attached_to_lesson: number,
-    date: string,
-    _id: number,
-}
-
