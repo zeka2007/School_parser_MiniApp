@@ -89,7 +89,6 @@ export const App: FC = () => {
 
 
   return (
-    <QueryClientProvider client={queryClient}>
       <AppRoot
         appearance={miniApp.isDark ? 'dark' : 'light'}
         platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
@@ -102,7 +101,5 @@ export const App: FC = () => {
             </Routes>
           </Router>
       </AppRoot>
-    </QueryClientProvider>
-
   );
 };
