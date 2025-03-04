@@ -1,6 +1,5 @@
 import { Lesson } from '@/common/Types/LessonTypes';
 import { ButtonCell, Cell, Input, List, Navigation, Section } from '@telegram-apps/telegram-ui';
-import { retrieveLaunchParams, usePopup } from '@tma.js/sdk-react';
 import { useState, type FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,9 +8,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export const LessonsEditPage: FC = () => {
 
   const lesson: Lesson = useLocation().state
-  const { initDataRaw } = retrieveLaunchParams();
-
-  const popup = usePopup()
 
   const navigate = useNavigate()
 
@@ -20,9 +16,9 @@ export const LessonsEditPage: FC = () => {
 
   return (
     <div>
-      <List>
+      <List className='list'>
         <Section header='Основное'>
-          <Input value={name} onChange={(e) => setName(e.target.value)} header='Название предмета'/>
+          <Input autoFocus value={name} onChange={(e) => setName(e.target.value)} header='Название предмета'/>
 
         </Section>
         <Section header='Действия'>

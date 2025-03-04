@@ -8,31 +8,30 @@ import UtilsComponent from './UtilsContent';
 import ActionsComponent from './ActionsComponent';
 import StatContent from './StatContent';
 
-import { useCloudStorage } from '@tma.js/sdk-react';
 import { HeaderContent } from './HeaderContent';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { getMarksFromLessons } from '@/common/Utils/MarksUtils';
-import { LessonUtils } from '@/common/Utils/LessonUtils';
-import { UserUtils } from '@/common/Utils/UserUtils';
+import { getLessons } from '@/common/Utils/LessonUtils';
+import { init } from '@telegram-apps/sdk-react';
 
 export const IndexPage: FC = () => {
 
-  const cloudStorage = useCloudStorage()
- 
-  const LU = new LessonUtils(cloudStorage)
-  const UU = new UserUtils(cloudStorage)
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+
+  const [lessons, setLessons] = useState<Lesson[]>(JSON.parse(sessionStorage.getItem('lessons') ?? '[]'));
 
   useEffect(() => {
-    // UU.deleteAll()
-    LU.getLessons().then((ls) => setLessons(ls))
+    init()
+    getLessons().then((ls) => {
+      setLessons(ls)
+      sessionStorage.setItem('lessons', JSON.stringify(lessons))
+    })
   }, [])
 
     
   return (
         
       <List className='list'>
-        <HeaderContent marks={getMarksFromLessons(lessons)}></HeaderContent>
+        <HeaderContent lessons={lessons}></HeaderContent>
         {lessons.length > 0 && <StatContent lessons={lessons}/>}
         <UtilsComponent lessons={lessons}/>
 

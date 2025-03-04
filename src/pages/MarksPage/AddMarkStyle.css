@@ -4,3 +4,8 @@
     width: 100%;
     height: fit-content;
 }
+
+.select-ios {
+    box-shadow: 0 0 0 2px var(--tgui--outline);
+    margin: 16px 22px 8px; 
+}

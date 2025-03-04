@@ -1,10 +1,9 @@
 import { Lesson } from '@/common/Types/LessonTypes';
-import { LessonUtils } from '@/common/Utils/LessonUtils';
-import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder } from '@telegram-apps/telegram-ui';
+import { addLesson, getLessons } from '@/common/Utils/LessonUtils';
+import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Skeleton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-import { useCloudStorage, useHapticFeedback, usePopup } from '@tma.js/sdk-react';
-import { useState, type FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect, useState, type FC } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,23 +12,29 @@ export const LessonsPage: FC = () => {
   const navigate = useNavigate()
   const [name, setName] = useState('')
   const [modalState, setModalState] = useState(false)
-  const LU = new LessonUtils(useCloudStorage())
+  // const LU = new LessonUtils(cloudStorage)
 
-  const [lessons, setLessons] = useState<Lesson[]>(useLocation().state)
+  const [lessons, setLessons] = useState<Lesson[]>([])
+  const [isLoading, setLoadingState] = useState(true)
 
-  const popup = usePopup()
-  const haptic = useHapticFeedback()
+  useEffect(() => {
+    getLessons().then((l) => {
+      setLessons(l)
+      setLoadingState(false)
+    })
+  }, [])
 
 
   return (
     <div>
-      <List >
+      <List className='list-padding'>
         <Placeholder
               header='Управление предметами'
               description='На этой странице вы можете создать, изменить или удалить учебный предмет для виртуального дневника'/>
 
+        {isLoading && [...Array(3)].map((_, i) => <Cell key={i}><Skeleton withoutAnimation visible>{new Array(50).join('*')}</Skeleton></Cell>)}
 
-        {lessons.map((lesson, index) => <Cell 
+        {!isLoading && lessons.map((lesson, index) => <Cell 
                       key={index}
                       after={<Navigation/>}
                       onClick={() => navigate('/lesson-edit', {state: lesson})}
@@ -49,16 +54,18 @@ export const LessonsPage: FC = () => {
           open={modalState}
         >
           <div >
-            <Input value={name} onChange={(e) => setName(e.target.value)} header='Название предмета'/>
+            <Input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder='Введите название предмета' header='Название предмета'/>
             <div style={{padding: 16}}>
               <Button onClick={() => {
-                LU.addLesson(name).then(() => {
-                    const data = lessons.concat(
-                      [{
-                        lesson_name: name,
-                        marks: []
-                      }]
-                    )
+                addLesson(name).then(() => {
+                    const newLesson =  [
+                        {
+                          lesson_name: name,
+                          id: lessons.length > 0 ? lessons[lessons.length - 1].id + 1 : 0,
+                          marks: []
+                        }
+                    ]
+                    const data = lessons.concat(newLesson)
                     setLessons(data)
                     setModalState(false)
                   })}} disabled={name.trim().length === 0} size="l" stretched>Добавить</Button>

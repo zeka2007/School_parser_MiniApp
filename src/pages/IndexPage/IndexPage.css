@@ -39,7 +39,7 @@
 }
 
 .list {
-  height: 100vh;
+  min-height: 100vh;
   background: var(--tgui--secondary_bg_color);
 
   max-width: 100%;
@@ -51,6 +51,12 @@
   font-family: 'Roboto';
   font-weight: bold;
   text-align: center;
+}
+
+.no-marks-text {
+  font-size: 42px;
+  margin: 16px;
+  display: inline-block;
 }
 
 .subtitle {

@@ -1,7 +1,8 @@
 import { Lesson } from '@/common/Types/LessonTypes';
 import { calculateAverage, getMarksList } from '@/common/Utils/MarksUtils';
+import { HorizontalScroll } from '@/components/TG/HorizontalScroll/HorizontalScroll';
 import { FlagOutlined, StarOutline, VerticalAlignBottom, VerticalAlignTop } from '@mui/icons-material';
-import { Cell, IconContainer, LargeTitle, List, Placeholder, Section } from '@telegram-apps/telegram-ui';
+import { Cell, IconContainer, LargeTitle, List, Checkbox, Placeholder, Section, SegmentedControl, Title, Multiselectable, Chip } from '@telegram-apps/telegram-ui';
 import { type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -10,10 +11,21 @@ export const MarkStatsFullPage: FC = () => {
     const marks_list: number[] = getMarksList(lesson.marks)
 
     return (
+        <div className='list'>
         <List>
-            <Placeholder
+        <Placeholder
                 style={{margin: '24px 0 0 0'}}
                 header={<LargeTitle caps weight='1'>{lesson.lesson_name}</LargeTitle>}/>
+        
+
+        <Section header='Отметки'>
+            <div style={{padding: '8px'}}>
+            <HorizontalScroll mode='mono' list={lesson.marks}/>
+
+            </div>
+        </Section>
+        
+            
 
             <Section header='Статистика предмета'>
                 <Cell
@@ -30,11 +42,10 @@ export const MarkStatsFullPage: FC = () => {
                     subtitle={marks_list.length}>Количество отметок</Cell>
                 
             </Section>
-            {/* <Section header='Даты выставления отметок'>
-                {lesson.marks.map((mark, index) =>
-                    <Cell key={index} description={mark.date} after={<Text>{getMarkString(mark)}</Text> }>{getWeekDay(new Date(mark.date))}</Cell>
-                )}
-            </Section> */}
+            
         </List>
+                
+
+</div>
     );
 };

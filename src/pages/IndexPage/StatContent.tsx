@@ -1,5 +1,5 @@
 import { Lesson } from "@/common/Types/LessonTypes";
-import { getBestLesson, getMarksFromLessons, getMarksList } from "@/common/Utils/MarksUtils";
+import { getBestLesson, getMarksFromLessons } from "@/common/Utils/MarksUtils";
 import { BookmarksOutlined, FlagOutlined } from "@mui/icons-material";
 import { Cell, IconContainer, Section } from "@telegram-apps/telegram-ui";
 import { FC } from "react";

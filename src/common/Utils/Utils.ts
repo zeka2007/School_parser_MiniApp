@@ -1,6 +1,10 @@
 import { Popup } from "@tma.js/sdk-react";
 import { useEffect, useRef, useState } from "react";
 
+export const LESSONS_NAMES = 'lessons_names'
+export const LESSONS_IDS = 'lessons_ids'
+export const LESSON_PREFIX = 'lesson_'
+
 export function useStateRef(initialValue: any): [any, React.Dispatch<any>, React.MutableRefObject<any>] {
   const [value, setValue] = useState(initialValue);
 

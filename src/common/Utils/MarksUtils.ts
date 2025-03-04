@@ -1,7 +1,9 @@
 import { Popup } from "@tma.js/sdk-react";
 import { BestLesson, Lesson } from "../Types/LessonTypes";
+import { cloudStorage } from "@telegram-apps/sdk-react";
+import { LESSON_PREFIX } from "./Utils";
 
-export const marksList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'н.', 'осв.']
+export const marksList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 export function calculateSum(marks?: number[]): number {
     var sum = 0;
@@ -54,6 +56,18 @@ export function getBestLesson(lessons: Lesson[]): BestLesson {
     })
 
     return {lesson: best_lesson, average_mark: best_lesson_average_mark}
+}
+
+
+export async function addMark(lesson_id: number, mark: string) {
+    var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
+    var marksStr = marks[LESSON_PREFIX + lesson_id]
+    if (marksStr != '') {
+        let marksList = marksStr.split(',')
+        marksList.push(mark)
+        await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.join(',')) 
+    }
+    else await cloudStorage.setItem(LESSON_PREFIX + lesson_id, mark)
 }
     
 

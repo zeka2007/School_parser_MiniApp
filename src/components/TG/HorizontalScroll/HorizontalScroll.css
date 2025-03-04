@@ -1,0 +1,11 @@
+.h-scroll {
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.scroll-cell {
+    height: 48px;
+    min-width: 48px;
+    text-align: center;
+    margin: 4px;
+}

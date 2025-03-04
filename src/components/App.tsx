@@ -3,15 +3,13 @@ import {
   bindMiniAppCSSVars,
   bindThemeParamsCSSVars,
   bindViewportCSSVars,
-  initHapticFeedback,
   initNavigator, initSettingsButton, useLaunchParams,
   useMiniApp,
-  usePopup,
   useThemeParams,
   useViewport
 } from '@tma.js/sdk-react';
 import { AppRoot } from '@telegram-apps/telegram-ui';
-import { type FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect, useMemo , createContext} from 'react';
 import {
   Route,
   Router,
@@ -19,8 +17,9 @@ import {
 } from 'react-router-dom';
 
 import { routes } from '@/navigation/routes.tsx';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { showErrorDialog } from '@/common/Utils/Utils';
+import { init } from '@telegram-apps/sdk-react';
+
+export const PlatformContext = createContext<'ios' | 'base' | undefined>(undefined)
 
 export const App: FC = () => {
 
@@ -29,27 +28,7 @@ export const App: FC = () => {
   const themeParams = useThemeParams();
   const viewport = useViewport();
 
-  const popup = usePopup()
-  const haptic = initHapticFeedback()
-
   const [settingsButton] = initSettingsButton()
-
-  const queryClient = new QueryClient(
-    {
-      defaultOptions: {
-        queries:{
-          retry: false,
-          refetchOnWindowFocus: false,
-        },
-        mutations: {
-          onError: () => { 
-            showErrorDialog(popup);
-            haptic.notificationOccurred('error');
-          }
-        }
-      }
-    }
-  );
 
 
   useEffect(() => {
@@ -81,18 +60,21 @@ export const App: FC = () => {
     settingsButton.on('click', () => { settingsButton.hide(); reactNavigator.push('/settings')})
   }, [])
 
+  useEffect(() => init(), [])
+
   useEffect(() => {
     navigator.attach();
     return () => navigator.detach();
   }, [navigator]);
 
+  const platform = ['macos', 'ios'].includes(lp.platform) ? 'ios' : 'ios'
 
 
   return (
+    <PlatformContext.Provider value={platform}>
       <AppRoot
         appearance={miniApp.isDark ? 'dark' : 'light'}
-        platform={['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'}
-        // platform='ios'
+        platform={platform}
       >
           <Router location={location} navigator={reactNavigator}>
             <Routes>
@@ -101,5 +83,6 @@ export const App: FC = () => {
             </Routes>
           </Router>
       </AppRoot>
+    </PlatformContext.Provider>
   );
 };

@@ -1,12 +1,8 @@
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { retrieveLaunchParams } from '@tma.js/sdk-react';
-import { useQuery } from 'react-query';
 import { Button, Cell, FixedLayout, List, Modal, Placeholder, Text } from '@telegram-apps/telegram-ui';
-import { getWeekDay } from '@/common/Utils/Utils';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-import { AddMark } from './AddMark';
-import { StudentData } from '@/common/Types/UserTypes';
 import { Lesson } from '@/common/Types/LessonTypes';
 
 
@@ -35,18 +31,18 @@ export const MarksPage: FC = () => {
       
     
         <Modal
-          header={<ModalHeader>Добавление предмета</ModalHeader>}
+          header={<ModalHeader>Добавление отметки</ModalHeader>}
           onOpenChange={(is_open) => {
             setModalState(is_open)
             if (!is_open) setCurrentMark(undefined)
           }}
           open={modalState}
         >
-          <List >
-            <AddMark lesson={lesson} currentMark={currentMark} onSuccess={() => {
+          <div >
+            {/* <AddMark lesson={lesson} currentMark={currentMark} onSuccess={() => {
               setModalState(false)
-            }}/>
-        </List>
+            }}/> */}
+        </div>
         
         </Modal>
     </div>
