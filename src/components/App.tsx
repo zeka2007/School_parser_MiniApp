@@ -67,7 +67,7 @@ export const App: FC = () => {
     return () => navigator.detach();
   }, [navigator]);
 
-  const platform = ['macos', 'ios'].includes(lp.platform) ? 'ios' : 'ios'
+  const platform = ['macos', 'ios'].includes(lp.platform) ? 'ios' : 'base'
 
 
   return (

@@ -1,11 +1,12 @@
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, Cell, Chip, FixedLayout, IconContainer, List, Modal, Placeholder, Section, Text} from '@telegram-apps/telegram-ui';
+import { Button, Cell, Chip, FixedLayout, IconContainer, List, Modal, Placeholder, Section, Text } from '@telegram-apps/telegram-ui';
 import { usePopup } from '@tma.js/sdk-react';
 import { calculateAverage, getMarksList, showDeleteTemporaryMarkDialog } from '@/common/Utils/MarksUtils';
 import { AddCircleOutline, FlagOutlined, StarOutline } from '@mui/icons-material';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { Lesson } from '@/common/Types/LessonTypes';
+import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
 
 export const MarkAddCheckPage: FC = () => {
 
@@ -15,36 +16,40 @@ export const MarkAddCheckPage: FC = () => {
     const [modalState, setModalState] = useState(false)
 
     const [marks, setMarks] = useState<number[]>([]);
-   
-    return (
-        <List style={{marginBottom: 82}}>
-            <Placeholder header='Калькулятор отметок' description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на добавленную отметку'/>
-            {marks_list.length > 0 &&
-            <Section header={'Статистика'}>
-                <Cell
-                    before={<IconContainer><StarOutline fontSize="large"/></IconContainer>}
-                    subtitle={calculateAverage(marks.concat(marks_list))}>Средний бал</Cell>
-                    <Cell
-                        before={<IconContainer><FlagOutlined fontSize="large"/></IconContainer>}
-                        subtitle={marks_list.length}>Количество отметок</Cell>
-                    <Cell
-                        before={<IconContainer><AddCircleOutline fontSize='large'/></IconContainer>}
-                        subtitle={marks.length}>Добавлено отметок</Cell>
-            </Section>}
 
-            { marks.length != 0 && <Section header='Добавленные отметки'>
-                { marks?.map((mark, i) => <Cell 
+    return (
+        <List className='list' style={{ paddingBottom: 82 }}>
+            <MainPlaceholder>
+                <Placeholder
+                    header='Калькулятор отметок'
+                    description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на добавленную отметку' />
+            </MainPlaceholder>
+            {marks_list.length + marks.length > 0 &&
+                <Section header={'Статистика'}>
+                    <Cell
+                        before={<IconContainer><StarOutline fontSize="large" /></IconContainer>}
+                        subtitle={calculateAverage(marks.concat(marks_list))}>Средний бал</Cell>
+                    <Cell
+                        before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
+                        subtitle={marks_list.length + marks.length}>Количество отметок</Cell>
+                    <Cell
+                        before={<IconContainer><AddCircleOutline fontSize='large' /></IconContainer>}
+                        subtitle={marks.length}>Добавлено отметок</Cell>
+                </Section>}
+
+            {marks.length != 0 && <Section header='Добавленные отметки'>
+                {marks?.map((mark, i) => <Cell
                     key={i}
                     onClick={() => showDeleteTemporaryMarkDialog(popup, () => {
-                            let newMarks = marks;
-                            newMarks.splice(i, 1)
-                            setMarks(newMarks);
-                        }
-                    )} 
+                        let newMarks = marks;
+                        newMarks.splice(i, 1)
+                        setMarks(newMarks);
+                    }
+                    )}
                     after={<Text>{mark}</Text>}>Отметка</Cell>)}
 
             </Section>}
-            { marks_list.length == 0 && <Placeholder header='Отметок нет'/>}
+            {marks_list.length + marks.length == 0 && <MainPlaceholder><Placeholder header='Отметок нет' /></MainPlaceholder>}
 
             <Modal
                 header={<ModalHeader>Добавление отметки</ModalHeader>}
@@ -52,20 +57,21 @@ export const MarkAddCheckPage: FC = () => {
                     setModalState(is_open)
                 }}
                 open={modalState}>
-                <div style={{padding: 16, textAlign: 'center'}}>
-                    { [...Array(10)].map((_, i) => <Chip 
-                        onClick={ () => {
-                            setMarks([...marks, i + 1]); 
-                            setModalState(false)}} style={{margin: 8}
-                        } 
+                <div style={{ padding: 16, textAlign: 'center' }}>
+                    {[...Array(10)].map((_, i) => <Chip
+                        onClick={() => {
+                            setMarks([...marks, i + 1]);
+                            setModalState(false)
+                        }} style={{ margin: 8 }
+                        }
                         key={i}>{i + 1}</Chip>)}
-                    </div>
+                </div>
             </Modal>
 
-            <FixedLayout style={{padding: 16}}>
-                <Button 
-                    size="l" 
-                    stretched 
+            <FixedLayout style={{ padding: 16 }}>
+                <Button
+                    size="l"
+                    stretched
                     onClick={() => setModalState(true)}>Добавить отметку
                 </Button>
             </FixedLayout>

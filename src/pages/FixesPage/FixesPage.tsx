@@ -4,6 +4,7 @@ import { Cell, Text, List, Placeholder, Section, Select} from '@telegram-apps/te
 import { calculateSum, getMarksList } from '@/common/Utils/MarksUtils';
 import { FixMark } from '@/common/Types/MarkTypes';
 import { Lesson } from '@/common/Types/LessonTypes';
+import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
 
 
 export const FixesPage: FC = () => {
@@ -41,7 +42,12 @@ export const FixesPage: FC = () => {
     if (roundedMark == 10) return <div className='center'><Placeholder header='Вы не можете улучшить отметку'></Placeholder></div>
 
     return (
-        <List>
+        <List className='list'>
+            <MainPlaceholder>
+                <Placeholder 
+                    header='Улучшение отметки'
+                    description='Выберете цель, после чего сможете увидеть отметки, которые необходимо получить для ее достижения'/>
+            </MainPlaceholder>
             <Select value={aimMark} onChange={(e) => setAimMark(Number(e.target.value))} header='Желаемая отметка'>
                 {[...Array(10 - roundedMark)].map((_, i) => <option key={i} value={roundedMark + i + 1}>{roundedMark + i + 1}</option>)}
             </Select>

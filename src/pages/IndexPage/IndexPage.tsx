@@ -10,7 +10,6 @@ import StatContent from './StatContent';
 
 import { HeaderContent } from './HeaderContent';
 import { Lesson } from '@/common/Types/LessonTypes';
-import { getMarksFromLessons } from '@/common/Utils/MarksUtils';
 import { getLessons } from '@/common/Utils/LessonUtils';
 import { init } from '@telegram-apps/sdk-react';
 
@@ -23,21 +22,21 @@ export const IndexPage: FC = () => {
     init()
     getLessons().then((ls) => {
       setLessons(ls)
-      sessionStorage.setItem('lessons', JSON.stringify(lessons))
+      sessionStorage.setItem('lessons', JSON.stringify(ls))
     })
   }, [])
 
-    
-  return (
-        
-      <List className='list'>
-        <HeaderContent lessons={lessons}></HeaderContent>
-        {lessons.length > 0 && <StatContent lessons={lessons}/>}
-        <UtilsComponent lessons={lessons}/>
 
-        <ActionsComponent lessons={lessons}/>
-      
-      </List>
-    
+  return (
+
+    <List className='list'>
+      <HeaderContent lessons={lessons}></HeaderContent>
+      {lessons.length > 0 && <StatContent lessons={lessons} />}
+      <UtilsComponent lessons={lessons} />
+
+      <ActionsComponent lessons={lessons} />
+
+    </List>
+
   );
 };
