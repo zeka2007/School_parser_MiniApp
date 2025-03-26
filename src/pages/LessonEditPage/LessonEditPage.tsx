@@ -1,4 +1,8 @@
+import { showDeleteLessonDialog } from '@/common/Dialogs/LessonDialogs';
+import { showDeleteMarksDialog } from '@/common/Dialogs/MarkDialogs';
 import { Lesson } from '@/common/Types/LessonTypes';
+import { removeLesson } from '@/common/Utils/LessonUtils';
+import { removeAllMarksFromLesson } from '@/common/Utils/MarksUtils';
 import { ButtonCell, Cell, Input, List, Navigation, Section } from '@telegram-apps/telegram-ui';
 import { useState, type FC } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,23 +15,22 @@ export const LessonsEditPage: FC = () => {
 
   const navigate = useNavigate()
 
-
   const [name, setName] = useState(lesson.lesson_name)
 
   return (
     <div>
       <List className='list'>
         <Section header='Основное'>
-          <Input autoFocus value={name} onChange={(e) => setName(e.target.value)} header='Название предмета'/>
+          <Input autoFocus value={name} onChange={(e) => setName(e.target.value)} header='Название предмета' />
 
         </Section>
         <Section header='Действия'>
-          <Cell after={<Navigation/>} onClick={() => navigate('/marks', {state: lesson})}>Управление отметками</Cell>
-          <ButtonCell mode='destructive' onClick={() => {}}>Стереть все отметки</ButtonCell>
-          <ButtonCell onClick={() => {}} mode='destructive'>Удалить предмет</ButtonCell>
+          <Cell after={<Navigation />} onClick={() => navigate('/marks', { state: lesson })}>Управление отметками</Cell>
+          <ButtonCell mode='destructive' onClick={() => showDeleteMarksDialog(() => removeAllMarksFromLesson(lesson.id).then(() => navigate(-1)))}>Стереть все отметки</ButtonCell>
+          <ButtonCell onClick={() => showDeleteLessonDialog(() => removeLesson(lesson.id).then(() => navigate(-1))) } mode='destructive'>Удалить предмет</ButtonCell>
         </Section>
       </List>
-      
+
       {/* <FixedLayout style={{padding: 16}}>
           <Button 
             size="l" 

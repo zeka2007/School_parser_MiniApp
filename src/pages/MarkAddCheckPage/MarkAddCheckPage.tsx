@@ -1,9 +1,8 @@
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Button, Cell, Chip, FixedLayout, IconContainer, List, Modal, Placeholder, Section, Text } from '@telegram-apps/telegram-ui';
-import { usePopup } from '@tma.js/sdk-react';
-import { calculateAverage, getMarksList, showDeleteTemporaryMarkDialog } from '@/common/Utils/MarksUtils';
-import { AddCircleOutline, FlagOutlined, StarOutline } from '@mui/icons-material';
+import { Button, Cell, Chip, FixedLayout, IconButton, IconContainer, List, Modal, Placeholder, Section } from '@telegram-apps/telegram-ui';
+import { calculateAverage, getMarksList } from '@/common/Utils/MarksUtils';
+import { AddCircleOutline, CloseRounded, FlagOutlined, StarOutline } from '@mui/icons-material';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
@@ -12,7 +11,6 @@ export const MarkAddCheckPage: FC = () => {
 
     const lesson: Lesson = useLocation().state;
     const marks_list = getMarksList(lesson.marks)
-    const popup = usePopup();
     const [modalState, setModalState] = useState(false)
 
     const [marks, setMarks] = useState<number[]>([]);
@@ -22,7 +20,7 @@ export const MarkAddCheckPage: FC = () => {
             <MainPlaceholder>
                 <Placeholder
                     header='Калькулятор отметок'
-                    description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на добавленную отметку' />
+                    description='Для добавления отметки нажмите на кнопку ниже, для удаления нажмите на крестик' />
             </MainPlaceholder>
             {marks_list.length + marks.length > 0 &&
                 <Section header={'Статистика'}>
@@ -40,13 +38,14 @@ export const MarkAddCheckPage: FC = () => {
             {marks.length != 0 && <Section header='Добавленные отметки'>
                 {marks?.map((mark, i) => <Cell
                     key={i}
-                    onClick={() => showDeleteTemporaryMarkDialog(popup, () => {
-                        let newMarks = marks;
-                        newMarks.splice(i, 1)
-                        setMarks(newMarks);
-                    }
-                    )}
-                    after={<Text>{mark}</Text>}>Отметка</Cell>)}
+                    after={
+                        <IconButton
+                            onClick={() => setMarks(marks.filter((_, m_index) => m_index !== i))}
+                            size='s'
+                            mode='plain'>
+                            <CloseRounded />
+                        </IconButton>
+                    }>{'Отметка: ' + mark}</Cell>)}
 
             </Section>}
             {marks_list.length + marks.length == 0 && <MainPlaceholder><Placeholder header='Отметок нет' /></MainPlaceholder>}

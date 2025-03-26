@@ -6,21 +6,23 @@ import MarkChipSlash from '@/components/TG/MarkChip/MarkChipSlash';
 import { addMark, marksList } from '@/common/Utils/MarksUtils';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { PlatformContext } from '@/components/App';
+import { showDeleteTemporaryMarkDialog } from '@/common/Dialogs/MarkDialogs';
 
 
 export const AddMarkBase: FC<{
     currentMark?: string,
-    children: React.ReactNode
+    children?: React.ReactNode
     onSubmit?: CallableFunction
-  }> = ({currentMark, children, onSubmit = () => {}}) => {
+    onDelete?: CallableFunction
+  }> = ({currentMark, children, onSubmit = () => {}, onDelete = () => {}}) => {
 
-  const [markIsSlash, setMarkIsSlash] = useState((currentMark?.includes('/')))
-  const [firstMark, setFirstMark] = useState('-')
-  const [secondMark, setSecondMark] = useState('-')
-  const [mark, setMark] = useState('-')
+  const isSlash = currentMark?.includes('/')
+
+  const [markIsSlash, setMarkIsSlash] = useState(isSlash)
+  const [firstMark, setFirstMark] = useState(isSlash ? currentMark?.split('/')[0] : '-')
+  const [secondMark, setSecondMark] = useState(isSlash ? currentMark?.split('/')[1] : '-')
+  const [mark, setMark] = useState(isSlash || currentMark == null ? '-' : currentMark)
   const [chooseFirst, setChooseFirst] = useState(true)
-  // const [date, setDate] = useState(currentMark?.date ? new Date(Date.parse(currentMark?.date)).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10))
-
 
   const checkClick = (element: React.MouseEvent<HTMLDivElement>) => {
     
@@ -57,11 +59,11 @@ export const AddMarkBase: FC<{
 
       {children}
 
-      {currentMark && <ButtonCell onClick={() => {}} style={{margin: 0}} mode='destructive'>Удалить отметку</ButtonCell>}
+      {currentMark && <ButtonCell onClick={() => showDeleteTemporaryMarkDialog(onDelete)} style={{padding: '0 22px'}} mode='destructive'>Удалить отметку</ButtonCell>}
       <div style={{padding: '12px 22px 16px'}}>
         <Button
-          onClick={() => onSubmit(markIsSlash ? `${firstMark}/${secondMark}` : mark)} // TODO: edit
-        size="l" stretched>{ currentMark ? 'Изменить' : 'Добавить'}</Button>
+          onClick={() => onSubmit(markIsSlash ? `${firstMark}/${secondMark}` : mark)}
+        disabled={markIsSlash ? (firstMark == '-' || secondMark == '-') : mark == '-'} size="l" stretched>{ currentMark ? 'Изменить' : 'Добавить'}</Button>
       </div>
     </div>
   );
@@ -70,10 +72,10 @@ export const AddMarkBase: FC<{
 
 export const AddMarkByLesson: FC<{lessons: Lesson[], onSuccess?: CallableFunction}> = ({lessons, onSuccess = () => {}}) => {
   const platform = useContext(PlatformContext)
-  const [lesson_id, setLessonId] = useState(0);
+  const [lesson_id, setLessonId] = useState(0)
 
   const onSubmit = (mark: string) => {
-    addMark(lesson_id, mark).then(() => onSuccess())
+    addMark(lesson_id, mark).then(() => onSuccess(lesson_id, mark))
   }
 
   return (

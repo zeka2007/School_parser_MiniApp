@@ -1,11 +1,12 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 
 import './IndexPage.css'
 import { Button, Modal } from "@telegram-apps/telegram-ui";
 import { calculateAverage, getMarksFromLessons } from "@/common/Utils/MarksUtils";
-import { PlatformContext } from "@/components/App";
-import { AddMarkByLesson } from "../MarksPage/AddMark";
+import { AddMarkByLesson } from "../../components/TG/AddMark/AddMark";
 import { Lesson } from "@/common/Types/LessonTypes";
+import { PlatformContext } from "@/components/App";
+import { ModalHeader } from "@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader";
 
 const MarksData : FC<{marks: number[]}> = ({marks}) => {
     return (
@@ -27,14 +28,20 @@ const NoMarks : FC = () => {
     )
 }
 
-export const HeaderContent : FC<{lessons: Lesson[]}> = ({lessons}) => {
+export const HeaderContent : FC<{lessons: Lesson[], onMarkAdd: CallableFunction}> = ({lessons, onMarkAdd}) => {
     const platform = useContext(PlatformContext)
     const marks = getMarksFromLessons(lessons)
+    const [modalState, setModalState] = useState(false);
+
     return (
     <div className={`header ${platform == 'ios' ? 'rounded-corners' : ''}`}>
         {marks.length == 0 ? <NoMarks/> : <MarksData marks={marks}/>}
-        <Modal trigger={<Button style={{marginTop: 'auto'}} stretched size="l">Добавить отметку</Button>}>
-            <AddMarkByLesson onSuccess={() => console.log('all ok')} lessons={lessons}/>
+        <Button onClick={() => setModalState(true)} style={{marginTop: 'auto'}} stretched size="l">Добавить отметку</Button>
+        <Modal header={<ModalHeader>Добавление отметки</ModalHeader>} onOpenChange={(is_open) => setModalState(is_open)} open={modalState}>
+            <AddMarkByLesson onSuccess={(lesson_id: number, mark: string) => {
+                onMarkAdd(lesson_id, mark)
+                setModalState(false)
+            }} lessons={lessons}/>
         </Modal>
         
     </div>

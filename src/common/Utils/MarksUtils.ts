@@ -1,4 +1,3 @@
-import { Popup } from "@tma.js/sdk-react";
 import { BestLesson, Lesson } from "../Types/LessonTypes";
 import { cloudStorage } from "@telegram-apps/sdk-react";
 import { LESSON_PREFIX } from "./Utils";
@@ -69,8 +68,28 @@ export async function addMark(lesson_id: number, mark: string) {
     }
     else await cloudStorage.setItem(LESSON_PREFIX + lesson_id, mark)
 }
-    
 
+export async function editMark(lesson_id: number, mark_index: number, new_mark: string) {
+    var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
+    var marksList = marks[LESSON_PREFIX + lesson_id].split(',')
+
+    marksList[mark_index] = new_mark
+
+    await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.join(','))
+}
+    
+export async function deleteMark(lesson_id: number, mark_index: number) {
+    var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
+    var marksList = marks[LESSON_PREFIX + lesson_id].split(',')
+
+    await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => index != mark_index).join(','))
+}
+
+
+export async function removeAllMarksFromLesson(lessons_id: number) {
+    await cloudStorage.deleteItem(LESSON_PREFIX + lessons_id)
+}
+    
 
 // export const deleteLessonMarksDialog = async (popup: Popup, mutation: UseMutationResult<any, unknown, DeleteMarkData, unknown>, data: DeleteMarkData, marks_count?: number) => {
 //     popup.open(
@@ -88,20 +107,4 @@ export async function addMark(lesson_id: number, mark: string) {
 //         }
 //     )
 // }
-
-export const showDeleteTemporaryMarkDialog = async (popup: Popup, callback: CallableFunction = () => {}) => {
-    popup.open(
-        {
-            message: `Удалить отметку?`,
-            buttons: [
-                {id: 'cancel', type: 'default', text: 'Нет'},
-                {id: 'delete', type: 'destructive', text: 'Да'}
-            ]
-        }
-    ).then(
-        btnId => {
-            if (btnId == 'delete') callback()
-        }
-    )
-}
 

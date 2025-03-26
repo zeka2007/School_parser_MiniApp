@@ -55,3 +55,20 @@ export async function addLesson(name: string) {
     await cloudStorage.setItem(LESSONS_NAMES, lessons_names)
     await cloudStorage.setItem(LESSONS_IDS, lessons_ids.join(','))
 }
+
+export async function removeLesson(lessons_id: number) {
+    const data = await cloudStorage.getItem([LESSONS_NAMES, LESSONS_IDS])
+    var newLessonsNames = data.lessons_names.split(',')
+    var newLessonsIds = data.lessons_ids.split(',')
+
+    const lesson_index = newLessonsIds.indexOf(lessons_id.toString())
+
+    newLessonsNames.splice(lesson_index, 1)
+    newLessonsIds.splice(lesson_index, 1)
+
+    await cloudStorage.setItem(LESSONS_NAMES, newLessonsNames.join(','))
+    await cloudStorage.setItem(LESSONS_IDS, newLessonsIds.join(','))
+
+    await cloudStorage.deleteItem(LESSON_PREFIX + lessons_id)
+
+}

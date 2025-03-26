@@ -11,7 +11,7 @@ import StatContent from './StatContent';
 import { HeaderContent } from './HeaderContent';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { getLessons } from '@/common/Utils/LessonUtils';
-import { init } from '@telegram-apps/sdk-react';
+import { init, mainButton } from '@telegram-apps/sdk-react';
 
 export const IndexPage: FC = () => {
 
@@ -30,7 +30,9 @@ export const IndexPage: FC = () => {
   return (
 
     <List className='list'>
-      <HeaderContent lessons={lessons}></HeaderContent>
+      <HeaderContent lessons={lessons} onMarkAdd={(lesson_id: number, mark: string) => {
+        setLessons(lessons.map(({id, lesson_name, marks}) => (lesson_id === id ? {id: id, lesson_name: lesson_name, marks: marks.concat(mark)} : {id: id, lesson_name: lesson_name, marks: marks})))
+      }}></HeaderContent>
       {lessons.length > 0 && <StatContent lessons={lessons} />}
       <UtilsComponent lessons={lessons} />
 
