@@ -27,6 +27,5 @@ export const routes: Route[] = [
   { path: '/marks', Component: MarksPage, title: 'marks-control'},
   { path: '/mark-add-check', Component: MarkAddCheckPage},
   { path: '/fixes', Component: FixesPage},
-
   { path: '/settings', Component: SettingsPage}
 ];

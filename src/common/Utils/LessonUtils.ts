@@ -72,3 +72,17 @@ export async function removeLesson(lessons_id: number) {
     await cloudStorage.deleteItem(LESSON_PREFIX + lessons_id)
 
 }
+
+
+export async function editLessonName(lessons_id: number, newName: string) {
+    const data = await cloudStorage.getItem([LESSONS_NAMES, LESSONS_IDS])
+    var newLessonsNames = data.lessons_names.split(',')
+    const newLessonsIds = data.lessons_ids.split(',')
+
+    const lesson_index = newLessonsIds.indexOf(lessons_id.toString())
+
+    newLessonsNames[lesson_index] = newName;
+
+    await cloudStorage.setItem(LESSONS_NAMES, newLessonsNames.join(','))
+
+}

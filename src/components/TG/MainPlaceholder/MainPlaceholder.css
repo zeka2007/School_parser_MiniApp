@@ -1,6 +1,6 @@
 .data-placeholder {
     background: var(--tg-theme-bg-color, white);
-    margin: 12px 0;
+    margin-bottom: 12px;
     min-height: 100px;
 }
 

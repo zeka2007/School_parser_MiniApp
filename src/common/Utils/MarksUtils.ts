@@ -14,16 +14,16 @@ export function calculateSum(marks?: number[]): number {
 
 
 export function getMarksList(marks: string[]): number[] {
-        var result: number[] = [];
-        marks.forEach((mark) => {
-            if (mark.includes('/')) {
-                const splted = mark.split('/')
-                result.push(Number(splted[0]), Number(splted[1]))
-            }
-            else result.push(Number(mark))
-        })
-        return result
-    }
+    var result: number[] = [];
+    marks.forEach((mark) => {
+        if (mark.includes('/')) {
+            const splted = mark.split('/')
+            result.push(Number(splted[0]), Number(splted[1]))
+        }
+        else result.push(Number(mark))
+    })
+    return result
+}
 
 export function getMarksFromLessons(lessons: Lesson[]): number[] {
     var result: number[] = [];
@@ -54,9 +54,14 @@ export function getBestLesson(lessons: Lesson[]): BestLesson {
 
     })
 
-    return {lesson: best_lesson, average_mark: best_lesson_average_mark}
+    return { lesson: best_lesson, average_mark: best_lesson_average_mark }
 }
 
+export async function getMarksFromLesson(lesson_id: number) {
+    const marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
+    const marksStr = marks[LESSON_PREFIX + lesson_id]
+    return marksStr != '' ? marksStr.split(',') : []
+}
 
 export async function addMark(lesson_id: number, mark: string) {
     var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
@@ -64,7 +69,7 @@ export async function addMark(lesson_id: number, mark: string) {
     if (marksStr != '') {
         let marksList = marksStr.split(',')
         marksList.push(mark)
-        await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.join(',')) 
+        await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.join(','))
     }
     else await cloudStorage.setItem(LESSON_PREFIX + lesson_id, mark)
 }
@@ -77,34 +82,17 @@ export async function editMark(lesson_id: number, mark_index: number, new_mark: 
 
     await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.join(','))
 }
-    
-export async function deleteMark(lesson_id: number, mark_index: number) {
+
+export async function deleteMark(lesson_id: number, mark_index: number | number[]) {
     var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
     var marksList = marks[LESSON_PREFIX + lesson_id].split(',')
 
-    await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => index != mark_index).join(','))
+    if (Array.isArray(mark_index)) 
+        await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => !mark_index.includes(index)).join(','))
+    else await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => index != mark_index).join(','))
 }
 
 
 export async function removeAllMarksFromLesson(lessons_id: number) {
     await cloudStorage.deleteItem(LESSON_PREFIX + lessons_id)
 }
-    
-
-// export const deleteLessonMarksDialog = async (popup: Popup, mutation: UseMutationResult<any, unknown, DeleteMarkData, unknown>, data: DeleteMarkData, marks_count?: number) => {
-//     popup.open(
-//         {
-//             title: 'Стереть все отметки?',
-//             message: `Все отметки ${marks_count != undefined ? `(${marks_count})` : ''} будут удалены. Это действие нельзя отменить`,
-//             buttons: [
-//                 {id: 'cancel', type: 'cancel'},
-//                 {id: 'delete', type: 'destructive', text: 'Стереть'}
-//             ]
-//         }
-//     ).then(
-//         btnId => {
-//             if (btnId == 'delete') mutation.mutate(data)
-//         }
-//     )
-// }
-

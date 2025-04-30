@@ -32,7 +32,7 @@ export const MarkStatsFullPage: FC = () => {
             </MainPlaceholder>
 
             {lesson.marks.length == 0 && <MainPlaceholder>
-                <Placeholder header={<Title>Отметок нет</Title>} />
+                <Placeholder header={<Title weight='2'>Отметок нет</Title>} />
             </MainPlaceholder>}
 
             {lesson.marks.length > 0 && (<><Section header='Отметки'>

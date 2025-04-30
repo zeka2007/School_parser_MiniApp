@@ -42,7 +42,6 @@
   min-height: 100vh;
   background: var(--tgui--secondary_bg_color);
 
-  max-width: 100%;
   margin: auto;
 }
 

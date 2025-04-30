@@ -1,12 +1,10 @@
 import { Lesson } from '@/common/Types/LessonTypes';
 import { addLesson, getLessons } from '@/common/Utils/LessonUtils';
-import { mainButton, mainButtonHasShineEffect } from '@telegram-apps/sdk-react';
+import { mainButton } from '@telegram-apps/sdk-react';
 import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Skeleton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { useEffect, useState, type FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
 
 export const LessonsPage: FC = () => {
 
@@ -18,6 +16,8 @@ export const LessonsPage: FC = () => {
   const [isLoading, setLoadingState] = useState(sessionStorage.getItem('lessons') == null)
 
   useEffect(() => {
+    if (!mainButton.isMounted()) mainButton.mount()
+    mainButton.setParams({ isVisible: false })
     getLessons().then((l) => {
       setLessons(l)
       sessionStorage.setItem('lessons', JSON.stringify(l))

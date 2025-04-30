@@ -8,5 +8,10 @@ export interface SplitMark {
 }
 export interface FixMark {
     mark: number
-    count: number
+    count: number | undefined
+}
+
+export interface MarkWithID {
+    id: string
+    value: string
 }

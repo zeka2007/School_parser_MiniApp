@@ -9,7 +9,7 @@ import {
   useViewport
 } from '@tma.js/sdk-react';
 import { AppRoot } from '@telegram-apps/telegram-ui';
-import { type FC, useEffect, useMemo , createContext} from 'react';
+import { type FC, useEffect, useMemo, createContext } from 'react';
 import {
   Route,
   Router,
@@ -17,7 +17,7 @@ import {
 } from 'react-router-dom';
 
 import { routes } from '@/navigation/routes.tsx';
-import { init } from '@telegram-apps/sdk-react';
+import { init, mainButton, themeParams } from '@telegram-apps/sdk-react';
 
 export const PlatformContext = createContext<'ios' | 'base' | undefined>(undefined)
 
@@ -25,19 +25,24 @@ export const App: FC = () => {
 
   const lp = useLaunchParams();
   const miniApp = useMiniApp();
-  const themeParams = useThemeParams();
+  const MiniAppThemeParams = useThemeParams();
   const viewport = useViewport();
 
   const [settingsButton] = initSettingsButton()
 
+  useMemo(() => {
+    init()
+    if (!mainButton.isMounted()) mainButton.mount()
+    if (!themeParams.isMounted()) themeParams.mount()
+  }, [])
 
   useEffect(() => {
-    return bindMiniAppCSSVars(miniApp, themeParams);
-  }, [miniApp, themeParams]);
+    return bindMiniAppCSSVars(miniApp, MiniAppThemeParams);
+  }, [miniApp, MiniAppThemeParams]);
 
   useEffect(() => {
-    return bindThemeParamsCSSVars(themeParams);
-  }, [themeParams]);
+    return bindThemeParamsCSSVars(MiniAppThemeParams);
+  }, [MiniAppThemeParams]);
 
   useEffect(() => {
     return viewport && bindViewportCSSVars(viewport);
@@ -57,10 +62,9 @@ export const App: FC = () => {
 
 
   useEffect(() => {
-    settingsButton.on('click', () => { settingsButton.hide(); reactNavigator.push('/settings')})
+    settingsButton.on('click', () => { settingsButton.hide(); reactNavigator.push('/settings') })
   }, [])
 
-  useEffect(() => init(), [])
 
   useEffect(() => {
     navigator.attach();
@@ -79,7 +83,6 @@ export const App: FC = () => {
           <Router location={location} navigator={reactNavigator}>
             <Routes>
               {routes.map((route) => <Route key={route.path} {...route} />)}
-              {/* <Route path='*' element={<Navigate to='/'/>}/> */}
             </Routes>
           </Router>
       </AppRoot>
