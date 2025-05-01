@@ -6,7 +6,7 @@ import { Lesson } from '@/common/Types/LessonTypes';
 import { AddMarkBase } from '@/components/TG/AddMark/AddMark';
 import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
 import { addMark, deleteMark } from '@/common/Utils/MarksUtils';
-import { hapticFeedback, mainButton, themeParams } from '@telegram-apps/sdk-react';
+import { hapticFeedback, hapticFeedbackImpactOccurred, mainButton, themeParams } from '@telegram-apps/sdk-react';
 import { showDeleteFewMarksDialog } from '@/common/Dialogs/MarkDialogs';
 import { MarkWithID } from '@/common/Types/MarkTypes';
 
@@ -74,7 +74,10 @@ export const MarksPage: FC = () => {
             <Button
               size="l"
               stretched
-              onClick={() => setModalState(true)}>Добавить отметку</Button>
+              onClick={() => {
+                hapticFeedbackImpactOccurred('heavy')
+                setModalState(true)
+              }}>Добавить отметку</Button>
           </div>
         </MainPlaceholder>
 
@@ -84,7 +87,12 @@ export const MarksPage: FC = () => {
 
         <Section>
           {lessonMarks.map((mark, index) =>
-            <Cell Component='label' before={<Multiselectable onChange={() => changeState(index)} checked={choosedMarks.includes(index)} />} key={mark.id} after={<Text>{mark.value}</Text>}>Отметка</Cell>
+            <Cell
+              className="no-hover"
+              Component='label'
+              before={<Multiselectable onChange={() => changeState(index)} checked={choosedMarks.includes(index)} />}
+              key={mark.id}
+              after={<Text>{mark.value}</Text>}>Отметка</Cell>
           )}
         </Section>
 
@@ -99,6 +107,7 @@ export const MarksPage: FC = () => {
       >
         <div >
           <AddMarkBase onSubmit={(mark: string) => {
+            hapticFeedbackImpactOccurred('heavy')
             addMark(lesson.id, mark)
             setLessonMarks([...lessonMarks, { id: crypto.randomUUID(), value: mark }])
             setModalState(false)

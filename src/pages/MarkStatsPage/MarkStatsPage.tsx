@@ -18,6 +18,7 @@ export const MarkStatsPage: FC = () => {
             {(title || description) && <Placeholder header={title} description={description} />}
 
             {lessons.map((val,) => <Cell
+                className="no-hover"
                 disabled={disabledEmpty && val.marks.length == 0}
                 key={val.id}
                 description={"Отметок: " + getMarksList(val.marks).length}

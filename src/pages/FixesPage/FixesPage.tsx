@@ -54,7 +54,7 @@ export const FixesPage: FC = () => {
                 {[...Array(10 - roundedMark)].map((_, i) => <option key={i} value={roundedMark + i + 1}>{roundedMark + i + 1}</option>)}
             </Select>
             <Section header='Инструкции для достижения цели'>
-                {result.map((item, i) => <Cell key={i} after={<Text>{'Количество: ' + item.count}</Text>}>{item.mark.toString()}</Cell>)}
+                {result.map((item, i) => <Cell className="no-hover" key={i} after={<Text>{'Количество: ' + item.count}</Text>}>{item.mark.toString()}</Cell>)}
             </Section>
         </List>
     );

@@ -10,7 +10,10 @@ const ActionsComponent: FC<{ lessons: Lesson[] }> = ({ lessons }) => {
 
     return (
         <Section header={'Действия'}>
-            <Cell onClick={() => navigate('/lessons', { state: lessons })} after={<Navigation />}>Управление предметами</Cell>
+            <Cell
+                className="no-hover"
+                onClick={() => navigate('/lessons', { state: lessons })}
+                after={<Navigation />}>Управление предметами</Cell>
         </Section>
     )
 }

@@ -1,6 +1,6 @@
 import { Lesson } from '@/common/Types/LessonTypes';
 import { addLesson, getLessons } from '@/common/Utils/LessonUtils';
-import { mainButton } from '@telegram-apps/sdk-react';
+import { hapticFeedbackImpactOccurred, mainButton } from '@telegram-apps/sdk-react';
 import { Button, Cell, FixedLayout, Input, List, Modal, Navigation, Placeholder, Skeleton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { useEffect, useState, type FC } from 'react';
@@ -17,7 +17,7 @@ export const LessonsPage: FC = () => {
 
   useEffect(() => {
     if (!mainButton.isMounted()) mainButton.mount()
-    mainButton.setParams({ isVisible: false, isLoaderVisible: false})
+    mainButton.setParams({ isVisible: false })
     getLessons().then((l) => {
       setLessons(l)
       sessionStorage.setItem('lessons', JSON.stringify(l))
@@ -35,6 +35,7 @@ export const LessonsPage: FC = () => {
         {isLoading && [...Array(3)].map((_, i) => <Cell key={i}><Skeleton withoutAnimation visible>{new Array(50).join('*')}</Skeleton></Cell>)}
 
         {!isLoading && lessons.map((lesson, index) => <Cell
+          className="no-hover"
           key={index}
           after={<Navigation />}
           onClick={() => navigate('/lesson-edit', { state: lesson })}
@@ -45,8 +46,10 @@ export const LessonsPage: FC = () => {
       <FixedLayout style={{ padding: 16 }}><Button
         size="l"
         stretched
-        onClick={() => setModalState(true)}>Добавить предмет</Button> </FixedLayout>
-
+        onClick={() => {
+          hapticFeedbackImpactOccurred('heavy')
+          setModalState(true)
+        }}>Добавить предмет</Button> </FixedLayout>
 
       <Modal
         header={<ModalHeader>Добавление предмета</ModalHeader>}
@@ -57,6 +60,7 @@ export const LessonsPage: FC = () => {
           <Input autoFocus value={name} onChange={(e) => setName(e.target.value)} placeholder='Введите название предмета' header='Название предмета' />
           <div style={{ padding: 16 }}>
             <Button onClick={() => {
+              hapticFeedbackImpactOccurred('heavy')
               addLesson(name).then(() => {
                 const newLesson = [
                   {

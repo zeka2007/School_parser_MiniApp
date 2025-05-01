@@ -21,9 +21,8 @@ export const LessonsEditPage: FC = () => {
   nameRef.current = name;
 
   const editNameListenner = () => {
-    mainButton.setParams({ isLoaderVisible: true })
     editLessonName(lesson.id, nameRef.current).then(() => {
-      mainButton.setParams({ isVisible: false, isLoaderVisible: false })
+      mainButton.setParams({ isVisible: false })
       setSnackbarState(true)
       lesson.lesson_name = nameRef.current
       hapticFeedback.notificationOccurred("success")
@@ -42,7 +41,7 @@ export const LessonsEditPage: FC = () => {
     )
     mainButton.onClick(editNameListenner)
     return () => mainButton.offClick(editNameListenner)
-    
+
   }, [])
 
 
@@ -61,7 +60,7 @@ export const LessonsEditPage: FC = () => {
 
         </Section>
         <Section header='Действия'>
-          <Cell after={<Navigation />} onClick={() => navigate('/marks', { state: lesson })}>Управление отметками</Cell>
+          <Cell className="no-hover" after={<Navigation />} onClick={() => navigate('/marks', { state: lesson })}>Управление отметками</Cell>
           <ButtonCell mode='destructive' onClick={() => showDeleteMarksDialog(() => removeAllMarksFromLesson(lesson.id).then(() => navigate(-1)))}>Стереть все отметки</ButtonCell>
           <ButtonCell onClick={() => showDeleteLessonDialog(() => removeLesson(lesson.id).then(() => navigate(-1)))} mode='destructive'>Удалить предмет</ButtonCell>
         </Section>

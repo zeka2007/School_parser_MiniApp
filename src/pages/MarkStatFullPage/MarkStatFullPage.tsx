@@ -8,6 +8,7 @@ import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AddMarkBase } from '../../components/TG/AddMark/AddMark';
+import { hapticFeedbackImpactOccurred, hapticFeedbackNotificationOccurred } from '@telegram-apps/sdk-react';
 
 export const MarkStatsFullPage: FC = () => {
     const lesson: Lesson = useLocation().state
@@ -25,6 +26,7 @@ export const MarkStatsFullPage: FC = () => {
                         description='Учебный предмет'
                         header={<LargeTitle caps weight='1'>{lesson.lesson_name}</LargeTitle>} />
                     <Button onClick={() => {
+                        hapticFeedbackImpactOccurred('heavy')
                         setCurrentMark(undefined)
                         setModalState(true)
                     }} size='l' stretched>Добавить отметку</Button>
@@ -45,15 +47,19 @@ export const MarkStatsFullPage: FC = () => {
                 </div>
             </Section><Section header='Статистика предмета'>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><StarOutline fontSize="large" /></IconContainer>}
                         subtitle={calculateAverage(marks_list)}>Средний бал</Cell>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><VerticalAlignBottom fontSize="large" /></IconContainer>}
                         subtitle={Math.min(...marks_list)}>Худшая отметка</Cell>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><VerticalAlignTop fontSize="large" /></IconContainer>}
                         subtitle={Math.max(...marks_list)}>Лучшая отметка</Cell>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
                         subtitle={marks_list.length}>Количество отметок</Cell>
 
@@ -76,6 +82,7 @@ export const MarkStatsFullPage: FC = () => {
                         setModalState(false)
                         lesson.marks = lesson.marks.filter((_, index) => index != currentMarkIndex)
                         history.replaceState(lesson, "lesson data")
+                        hapticFeedbackNotificationOccurred('success')
                     }}
                     onSubmit={(newMark: string) => {
                         if (currentMark) {

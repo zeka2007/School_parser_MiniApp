@@ -6,6 +6,7 @@ import { AddCircleOutline, CloseRounded, FlagOutlined, StarOutline } from '@mui/
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
+import { hapticFeedbackImpactOccurred } from '@telegram-apps/sdk-react';
 
 export const MarkAddCheckPage: FC = () => {
 
@@ -16,7 +17,7 @@ export const MarkAddCheckPage: FC = () => {
     const [marks, setMarks] = useState<number[]>([]);
 
     return (
-        <List className='list' style={{ paddingBottom: 82 }}>
+        <List className='list-padding'>
             <MainPlaceholder>
                 <Placeholder
                     header='Калькулятор отметок'
@@ -25,18 +26,22 @@ export const MarkAddCheckPage: FC = () => {
             {marks_list.length + marks.length > 0 &&
                 <Section header={'Статистика'}>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><StarOutline fontSize="large" /></IconContainer>}
                         subtitle={calculateAverage(marks.concat(marks_list))}>Средний бал</Cell>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
                         subtitle={marks_list.length + marks.length}>Количество отметок</Cell>
                     <Cell
+                        className="no-hover"
                         before={<IconContainer><AddCircleOutline fontSize='large' /></IconContainer>}
                         subtitle={marks.length}>Добавлено отметок</Cell>
                 </Section>}
 
             {marks.length != 0 && <Section header='Добавленные отметки'>
                 {marks?.map((mark, i) => <Cell
+                    className="no-hover"
                     key={i}
                     after={
                         <IconButton
@@ -59,6 +64,7 @@ export const MarkAddCheckPage: FC = () => {
                 <div style={{ padding: 16, textAlign: 'center' }}>
                     {[...Array(10)].map((_, i) => <Chip
                         onClick={() => {
+                            hapticFeedbackImpactOccurred('light')
                             setMarks([...marks, i + 1]);
                             setModalState(false)
                         }} style={{ margin: 8 }
@@ -71,8 +77,10 @@ export const MarkAddCheckPage: FC = () => {
                 <Button
                     size="l"
                     stretched
-                    onClick={() => setModalState(true)}>Добавить отметку
-                </Button>
+                    onClick={() => {
+                        hapticFeedbackImpactOccurred('heavy')
+                        setModalState(true)
+                    }}>Добавить отметку</Button>
             </FixedLayout>
         </List>
     );

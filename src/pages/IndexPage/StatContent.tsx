@@ -11,15 +11,19 @@ const StatContent: FC<{ lessons: Lesson[] }> = ({ lessons }) => {
     return (
         <Section >
             <Cell
+                className="no-hover"
                 before={<IconContainer><BookmarksOutlined fontSize="large" /></IconContainer>}
                 subtitle={`${best_lesson.lesson} (${best_lesson.average_mark.toFixed(2)})`}>Лучший предмет</Cell>
             <Cell
+                className="no-hover"
                 before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
                 subtitle={all_marks.length}>Количество отметок</Cell>
             <Cell
+                className="no-hover"
                 before={<IconContainer><VerticalAlignBottom fontSize="large" /></IconContainer>}
                 subtitle={Math.min(...all_marks)}>Худшая отметка</Cell>
             <Cell
+                className="no-hover"
                 before={<IconContainer><VerticalAlignTop fontSize="large" /></IconContainer>}
                 subtitle={Math.max(...all_marks)}>Лучшая отметка</Cell>
         </Section>
