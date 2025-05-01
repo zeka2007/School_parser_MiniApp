@@ -17,7 +17,7 @@ export const LessonsPage: FC = () => {
 
   useEffect(() => {
     if (!mainButton.isMounted()) mainButton.mount()
-    mainButton.setParams({ isVisible: false })
+    mainButton.setParams({ isVisible: false, isLoaderVisible: false})
     getLessons().then((l) => {
       setLessons(l)
       sessionStorage.setItem('lessons', JSON.stringify(l))

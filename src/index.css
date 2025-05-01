@@ -3,6 +3,10 @@ html, body {
   margin: 0;
 }
 
+.tgui-b8dfba0b5c3d054c:hover {
+  background: unset !important;
+}
+
 input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;

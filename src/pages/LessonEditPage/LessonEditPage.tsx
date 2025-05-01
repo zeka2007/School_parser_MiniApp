@@ -23,7 +23,7 @@ export const LessonsEditPage: FC = () => {
   const editNameListenner = () => {
     mainButton.setParams({ isLoaderVisible: true })
     editLessonName(lesson.id, nameRef.current).then(() => {
-      mainButton.setParams({ isVisible: false })
+      mainButton.setParams({ isVisible: false, isLoaderVisible: false })
       setSnackbarState(true)
       lesson.lesson_name = nameRef.current
       hapticFeedback.notificationOccurred("success")
@@ -66,7 +66,7 @@ export const LessonsEditPage: FC = () => {
           <ButtonCell onClick={() => showDeleteLessonDialog(() => removeLesson(lesson.id).then(() => navigate(-1)))} mode='destructive'>Удалить предмет</ButtonCell>
         </Section>
       </List>
-      
+
       {snackbarState && <Snackbar onClose={() => setSnackbarState(false)}>Успешно сохранено</Snackbar>}
     </div>
   );
