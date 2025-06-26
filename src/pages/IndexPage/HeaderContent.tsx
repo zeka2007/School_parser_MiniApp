@@ -47,6 +47,7 @@ export const HeaderContent: FC<{ lessons: Lesson[], onMarkAdd: CallableFunction 
                 size="l">Добавить отметку</Button>
             <Modal header={<ModalHeader>Добавление отметки</ModalHeader>} onOpenChange={(is_open) => setModalState(is_open)} open={modalState}>
                 <AddMarkByLesson onSuccess={(lesson_id: number, mark: string) => {
+                    hapticFeedbackImpactOccurred('heavy')
                     onMarkAdd(lesson_id, mark)
                     setModalState(false)
                 }} lessons={lessons} />

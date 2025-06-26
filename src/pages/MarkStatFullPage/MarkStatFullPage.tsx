@@ -40,6 +40,7 @@ export const MarkStatsFullPage: FC = () => {
             {lesson.marks.length > 0 && (<><Section header='Отметки'>
                 <div style={{ padding: '8px' }}>
                     <HorizontalScroll onItemClick={(mark_index: number) => {
+                        hapticFeedbackImpactOccurred('light')
                         setCurrentMark(lesson.marks[mark_index])
                         setCurrentMarkIndex(mark_index)
                         setModalState(true)
@@ -85,6 +86,7 @@ export const MarkStatsFullPage: FC = () => {
                         hapticFeedbackNotificationOccurred('success')
                     }}
                     onSubmit={(newMark: string) => {
+                        hapticFeedbackImpactOccurred('heavy')
                         if (currentMark) {
                             editMark(lesson.id, currentMarkIndex, newMark)
                             lesson.marks[currentMarkIndex] = newMark
