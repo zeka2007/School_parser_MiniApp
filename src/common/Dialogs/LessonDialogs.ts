@@ -3,6 +3,7 @@ import { popup } from "@telegram-apps/sdk-react"
 export const showDeleteLessonDialog = async (callback: CallableFunction = () => {}) => {
     popup.open(
         {
+            title: 'Подтвердите действие',
             message: `Удалить предмет?`,
             buttons: [
                 {id: 'cancel', type: 'default', text: 'Нет'},

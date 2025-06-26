@@ -3,6 +3,7 @@ import { popup } from "@telegram-apps/sdk-react"
 export const showDeleteTemporaryMarkDialog = async (callback: CallableFunction = () => {}) => {
     popup.open(
         {
+            title: 'Подтвердите действие',
             message: `Удалить отметку?`,
             buttons: [
                 {id: 'cancel', type: 'default', text: 'Нет'},
@@ -36,6 +37,7 @@ export const showDeleteFewMarksDialog = async (callback: CallableFunction = () =
 export const showDeleteMarksDialog = async (callback: CallableFunction = () => {}) => {
     popup.open(
         {
+            title: 'Подтвердите действие',
             message: `Удалить все отметки для этого предмета?`,
             buttons: [
                 {id: 'cancel', type: 'default', text: 'Нет'},
