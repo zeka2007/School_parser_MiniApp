@@ -2,13 +2,15 @@ import type { ComponentType, JSX } from 'react';
 
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { MarkStatsPage } from '@/pages/MarkStatsPage/MarkStatsPage';
-import { SettingsPage } from '@/pages/SettingsPage/SettingsPage';
 import { MarkStatsFullPage } from '@/pages/MarkStatFullPage/MarkStatFullPage';
 import { LessonsPage } from '@/pages/LessonsPage/LessonsPage';
 import { LessonsEditPage } from '@/pages/LessonEditPage/LessonEditPage';
 import { MarksPage } from '@/pages/MarksPage/MarksPage';
 import { MarkAddCheckPage } from '@/pages/MarkAddCheckPage/MarkAddCheckPage';
 import { FixesPage } from '@/pages/FixesPage/FixesPage';
+import { Stage2 } from '@/pages/WelcomePage/Stage2';
+import { Stage1 } from '@/pages/WelcomePage/Stage1';
+import { Stage3 } from '@/pages/WelcomePage/Stage3';
 
 
 interface Route {
@@ -27,5 +29,7 @@ export const routes: Route[] = [
   { path: '/marks', Component: MarksPage, title: 'marks-control'},
   { path: '/mark-add-check', Component: MarkAddCheckPage},
   { path: '/fixes', Component: FixesPage},
-  { path: '/settings', Component: SettingsPage}
+  { path: '/welcome', Component: Stage1},
+  { path: '/welcome/stage2', Component: Stage2},
+  { path: '/welcome/stage3', Component: Stage3}
 ];

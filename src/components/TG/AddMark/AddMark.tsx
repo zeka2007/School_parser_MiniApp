@@ -3,7 +3,7 @@ import { useContext, useState, type FC } from 'react';
 import './AddMarkStyle.css'
 import MarkChip from '@/components/TG/MarkChip/MarkChip';
 import MarkChipSlash from '@/components/TG/MarkChip/MarkChipSlash';
-import { addMark, marksList } from '@/common/Utils/MarksUtils';
+import { addMark, getConstMarksList} from '@/common/Utils/MarksUtils';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { PlatformContext } from '@/components/App';
 import { showDeleteTemporaryMarkDialog } from '@/common/Dialogs/MarkDialogs';
@@ -18,6 +18,8 @@ export const AddMarkBase: FC<{
 }> = ({ currentMark, children, onSubmit = () => { }, onDelete = () => { } }) => {
 
   const isSlash = currentMark?.includes('/')
+
+  const marksList = getConstMarksList()
 
   const [markIsSlash, setMarkIsSlash] = useState(isSlash)
   const [firstMark, setFirstMark] = useState(isSlash ? currentMark?.split('/')[0] : '-')
@@ -57,7 +59,7 @@ export const AddMarkBase: FC<{
           setSecondMark('-')
           setChooseFirst(true);
           setMarkIsSlash(!markIsSlash)
-        }} style={{ margin: 8 }} className='mark-preview' mode={markIsSlash ? 'mono' : 'outline'}>отметка через /'</Chip>
+        }} style={{ margin: 8 }} className='mark-preview' mode={markIsSlash ? 'mono' : 'outline'}>отметка через /</Chip>
 
       </div>
 

@@ -5,6 +5,9 @@ export const LESSONS_NAMES = 'lessons_names'
 export const LESSONS_IDS = 'lessons_ids'
 export const LESSON_PREFIX = 'lesson_'
 
+export const SETTING_MARK = 'min_max_mark_setting'
+
+
 export function useStateRef(initialValue: any): [any, React.Dispatch<any>, React.MutableRefObject<any>] {
   const [value, setValue] = useState(initialValue);
 

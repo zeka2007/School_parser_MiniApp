@@ -1,0 +1,7 @@
+.number-input-container {
+    display: grid;
+}
+
+.number-input-container button {
+    justify-content: center;
+}

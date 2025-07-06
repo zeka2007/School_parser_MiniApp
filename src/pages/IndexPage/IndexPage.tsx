@@ -8,19 +8,26 @@ import { Lesson } from '@/common/Types/LessonTypes';
 import { getLessons } from '@/common/Utils/LessonUtils';
 
 import './IndexPage.css'
+import { Stage1 } from '../WelcomePage/Stage1';
+import { getMinMaxMark } from '@/common/Utils/UserUtils';
 
 export const IndexPage: FC = () => {
 
-
   const [lessons, setLessons] = useState<Lesson[]>(JSON.parse(sessionStorage.getItem('lessons') ?? '[]'));
+  const [isEmpty, setEmpty] = useState(false)
 
   useEffect(() => {
     getLessons().then((ls) => {
       setLessons(ls)
+      if (ls.length == 0) setEmpty(true)
       sessionStorage.setItem('lessons', JSON.stringify(ls))
+    })
+    getMinMaxMark().then((data) => {
+      sessionStorage.setItem('min_max_mark', JSON.stringify(data))
     })
   }, [])
 
+  if (isEmpty) return <Stage1/>
 
   return (
 

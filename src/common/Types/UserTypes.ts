@@ -12,3 +12,8 @@ export interface StudentData {
 export interface TransferData {
     lessons: [Lesson]
 }
+
+export interface MinMaxMarkData {
+    min_mark: number
+    max_mark: number
+}

@@ -1,8 +1,15 @@
 import { BestLesson, Lesson } from "../Types/LessonTypes";
 import { cloudStorage } from "@telegram-apps/sdk-react";
 import { LESSON_PREFIX } from "./Utils";
+import { MinMaxMarkData } from "../Types/UserTypes";
 
-export const marksList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+export function getConstMarksList(): number[] {
+    const data: MinMaxMarkData = JSON.parse(sessionStorage.getItem('min_max_mark') ?? '{"min_mark": 0, "max_mark": 0}')
+    const length = data.max_mark - data.min_mark + 1;
+    const arr = Array.from({ length: length }, (_, index) => data.min_mark + index);
+    return arr
+}
+
 
 export function calculateSum(marks?: number[]): number {
     var sum = 0;

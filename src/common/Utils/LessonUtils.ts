@@ -3,6 +3,8 @@ import { cloudStorage } from "@telegram-apps/sdk-react";
 import { LESSON_PREFIX, LESSONS_IDS, LESSONS_NAMES } from "./Utils";
 
 
+export const DEFAULT_LESSONS = ['Русский язык', 'Литература', 'Математика', 'Иностранный язык', 'История', 'География', 'Биология', 'Физика', 'Химия', 'Информатика', 'Физкультура']
+
 export function idToName(ids: string[]): string[] {
     if (ids[0] == '') return [LESSON_PREFIX + '0']
 
@@ -41,16 +43,27 @@ export async function getLessons(): Promise<Lesson[]> {
     return lessons
 }
 
-export async function addLesson(name: string) {    
+export async function addLesson(name: string | string[]) {    
     const data = await cloudStorage.getItem([LESSONS_NAMES, LESSONS_IDS])
     let lessons_names = data.lessons_names
     let lessons_ids = data.lessons_ids.split(',')
 
-    lessons_names += lessons_names == '' ? name : ',' + name
+    if (Array.isArray(name)) {
+        name.map((val) => {
+            lessons_names += lessons_names == '' ? val : ',' + val
+            if (lessons_ids[0] == '') lessons_ids = ['0']
+            else lessons_ids.push((Number(lessons_ids[lessons_ids.length - 1]) + 1).toString())
+        })
+    }
+    else {
+        lessons_names += lessons_names == '' ? name : ',' + name
+        if (data.lessons_ids == '') lessons_ids = ['0']
+     
+        else lessons_ids.push((Number(lessons_ids[lessons_ids.length - 1]) + 1).toString())
+    }
 
-    if (data.lessons_ids == '') lessons_ids = ['0']
- 
-    else lessons_ids.push((Number(lessons_ids[lessons_ids.length - 1]) + 1).toString())
+
+    console.log(lessons_names, lessons_ids.join(','))
 
     await cloudStorage.setItem(LESSONS_NAMES, lessons_names)
     await cloudStorage.setItem(LESSONS_IDS, lessons_ids.join(','))

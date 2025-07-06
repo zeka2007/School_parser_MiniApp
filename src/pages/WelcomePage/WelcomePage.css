@@ -1,0 +1,15 @@
+.parent {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+.stage-content {
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+}
+
+.bottom-layout {
+    text-align: center;
+    margin: 16px;
+}
