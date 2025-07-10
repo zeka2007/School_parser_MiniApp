@@ -19,11 +19,11 @@ export const IndexPage: FC = () => {
   useEffect(() => {
     getLessons().then((ls) => {
       setLessons(ls)
-      if (ls.length == 0) setEmpty(true)
       sessionStorage.setItem('lessons', JSON.stringify(ls))
     })
     getMinMaxMark().then((data) => {
-      sessionStorage.setItem('min_max_mark', JSON.stringify(data))
+      if (!data) setEmpty(true)
+      else sessionStorage.setItem('min_max_mark', JSON.stringify(data))
     })
   }, [])
 

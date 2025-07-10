@@ -3,8 +3,12 @@ import { cloudStorage } from "@telegram-apps/sdk-react";
 import { LESSON_PREFIX } from "./Utils";
 import { MinMaxMarkData } from "../Types/UserTypes";
 
+export function getSessionMarksData(): MinMaxMarkData {
+    return JSON.parse(sessionStorage.getItem('min_max_mark') ?? '{"min_mark": 0, "max_mark": 0}')
+}
+
 export function getConstMarksList(): number[] {
-    const data: MinMaxMarkData = JSON.parse(sessionStorage.getItem('min_max_mark') ?? '{"min_mark": 0, "max_mark": 0}')
+    const data: MinMaxMarkData = getSessionMarksData()
     const length = data.max_mark - data.min_mark + 1;
     const arr = Array.from({ length: length }, (_, index) => data.min_mark + index);
     return arr

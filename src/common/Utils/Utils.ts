@@ -6,6 +6,7 @@ export const LESSONS_IDS = 'lessons_ids'
 export const LESSON_PREFIX = 'lesson_'
 
 export const SETTING_MARK = 'min_max_mark_setting'
+export const MAX_MARK_LIMIT = 20 // max mark which can be set
 
 
 export function useStateRef(initialValue: any): [any, React.Dispatch<any>, React.MutableRefObject<any>] {

@@ -4,10 +4,10 @@ import { FC, useState } from "react"
 import './Stage2.css'
 import { useNavigate } from "react-router-dom"
 import { setMinMaxMark } from "@/common/Utils/UserUtils"
+import { MAX_MARK_LIMIT } from "@/common/Utils/Utils"
 
 export const Stage2: FC = () => {
 
-    const maxMarkLimit = 20 // max mark which can be set
     const navigator = useNavigate()
 
     const [minMark, setMinMark] = useState(0)
@@ -18,7 +18,7 @@ export const Stage2: FC = () => {
     const [disableDownMaxBtn, setDisableDownMaxBtn] = useState(false)
 
     const minMakrChange = (v: number) => {
-        const cond = v >= maxMark || v >= maxMarkLimit
+        const cond = v >= maxMark || v >= MAX_MARK_LIMIT
 
         setDisableDownMinBtn(v <= 0)
         setDisableUpMinBtn(cond)
@@ -35,7 +35,7 @@ export const Stage2: FC = () => {
 
 
         setDisableDownMaxBtn(cond)
-        setDisableUpMaxBtn(v >= maxMarkLimit)
+        setDisableUpMaxBtn(v >= MAX_MARK_LIMIT)
 
 
         setMaxMark(v)
