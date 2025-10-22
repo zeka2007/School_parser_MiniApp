@@ -48,7 +48,7 @@ export const FixesPage: FC = () => {
             <MainPlaceholder>
                 <Placeholder
                     header='Улучшение отметки'
-                    description='Выберете цель, после чего сможете увидеть отметки, которые необходимо получить для ее достижения' />
+                    description='Выберите цель, после чего сможете увидеть отметки, которые необходимо получить для ее достижения' />
             </MainPlaceholder>
             <Select value={aimMark} onChange={(e) => setAimMark(Number(e.target.value))} header='Желаемая отметка'>
                 {[...Array(10 - roundedMark)].map((_, i) => <option key={i} value={roundedMark + i + 1}>{roundedMark + i + 1}</option>)}
