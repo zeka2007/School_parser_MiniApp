@@ -1,10 +1,12 @@
 import { useMemo, useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Cell, Text, List, Placeholder, Section, Select } from '@telegram-apps/telegram-ui';
-import { calculateSum, getMarksList } from '@/common/Utils/MarksUtils';
+import { Cell, Text, List, Placeholder, Section, Chip } from '@telegram-apps/telegram-ui';
+import { calculateSum, getMarksList, getSessionMarksData } from '@/common/Utils/MarksUtils';
 import { FixMark } from '@/common/Types/MarkTypes';
 import { Lesson } from '@/common/Types/LessonTypes';
 import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
+import { CustomHorizontalScroll } from '@/components/TG/HorizontalScroll/HorizontalScroll';
+import { BannerChip } from '@/components/TG/BannerChip/BannerChip';
 
 
 export const FixesPage: FC = () => {
@@ -13,7 +15,9 @@ export const FixesPage: FC = () => {
     const marks = getMarksList(lesson.marks)
     const marksSum = calculateSum(marks)
     const roundedMark = Math.round(marksSum / marks.length)
-    const [aimMark, setAimMark] = useState(roundedMark < 10 ? roundedMark + 1 : 10)
+    const { max_mark } = getSessionMarksData()
+    const [aimMark, setAimMark] = useState(roundedMark < max_mark ? roundedMark + 1 : max_mark)
+    const marksList = [...Array(max_mark - roundedMark)].map((_, i) => roundedMark + i + 1)
 
     const result = useMemo(() => {
 
@@ -25,13 +29,13 @@ export const FixesPage: FC = () => {
         let sum = marksSum;
         if (startMark <= roundedMark) return fixedList
         while (true) {
-            
+
             sum += startMark
             length++
             count++
-            if (Math.round(sum / length) >= aimMark) {  
-                fixedList.push({mark: startMark, count: count})
-                if (startMark == 10) break
+            if (Math.round(sum / length) >= aimMark) {
+                fixedList.push({ mark: startMark, count: count })
+                if (startMark == max_mark) break
                 count = 0;
                 startMark++;
                 length = marks.length;
@@ -41,8 +45,6 @@ export const FixesPage: FC = () => {
         return fixedList
     }, [aimMark])
 
-    if (roundedMark == 10) return <div className='center'><Placeholder header='Вы не можете улучшить отметку'></Placeholder></div>
-
     return (
         <List className='list'>
             <MainPlaceholder>
@@ -50,11 +52,30 @@ export const FixesPage: FC = () => {
                     header='Улучшение отметки'
                     description='Выберите цель, после чего сможете увидеть отметки, которые необходимо получить для ее достижения' />
             </MainPlaceholder>
-            <Select value={aimMark} onChange={(e) => setAimMark(Number(e.target.value))} header='Желаемая отметка'>
-                {[...Array(10 - roundedMark)].map((_, i) => <option key={i} value={roundedMark + i + 1}>{roundedMark + i + 1}</option>)}
-            </Select>
+
+
+            <Section header='Желаемая отметка'>
+                <div style={{ padding: '0 8px 8px' }}>
+                    {roundedMark == max_mark ? <BannerChip mode='mono'>Вы не можете улучшить отметку</BannerChip> :
+                        <CustomHorizontalScroll>
+
+                            {marksList.map((m) => <Chip
+                                mode='mono'
+                                onClick={() => setAimMark(m)}
+                                className={`scroll-cell ${m == aimMark ? 'cell-border' : ''}`}>{m}</Chip>)}
+
+                        </CustomHorizontalScroll>
+                    }
+                </div>
+            </Section>
+
             <Section header='Инструкции для достижения цели'>
-                {result.map((item, i) => <Cell className="no-hover" key={i} after={<Text>{'Количество: ' + item.count}</Text>}>{item.mark.toString()}</Cell>)}
+                {roundedMark == max_mark ?
+                    <div style={{ padding: '0 8px 8px' }}>
+                        <BannerChip mode='mono'>Нет доступных инструкций</BannerChip>
+                    </div> :
+                    result.map((item, i) => <Cell className="no-hover" key={i} after={<Text>{'Количество: ' + item.count}</Text>}>{item.mark.toString()}</Cell>)
+                }
             </Section>
         </List>
     );

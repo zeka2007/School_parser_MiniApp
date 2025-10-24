@@ -1,0 +1,10 @@
+.banner-chip {
+    height: 48px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.banner-chip-div {
+    padding: 8px;
+}
