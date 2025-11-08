@@ -55,7 +55,7 @@ export const FixesPage: FC = () => {
 
 
             <Section header='Желаемая отметка'>
-                <div style={{ padding: '0 8px 8px' }}>
+                <div style={{ padding: '8px' }}>
                     {roundedMark == max_mark ? <BannerChip mode='mono'>Вы не можете улучшить отметку</BannerChip> :
                         <CustomHorizontalScroll>
 
@@ -71,7 +71,7 @@ export const FixesPage: FC = () => {
 
             <Section header='Инструкции для достижения цели'>
                 {roundedMark == max_mark ?
-                    <div style={{ padding: '0 8px 8px' }}>
+                    <div style={{ padding: '8px' }}>
                         <BannerChip mode='mono'>Нет доступных инструкций</BannerChip>
                     </div> :
                     result.map((item, i) => <Cell className="no-hover" key={i} after={<Text>{'Количество: ' + item.count}</Text>}>{item.mark.toString()}</Cell>)

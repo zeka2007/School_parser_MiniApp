@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Cell, List, Placeholder, Text } from '@telegram-apps/telegram-ui';
 import { calculateAverage, getMarksList } from '@/common/Utils/MarksUtils';
 import { Lesson } from '@/common/Types/LessonTypes';
+import { isNumberCheck } from '@/common/Utils/Utils';
 
 export const MarkStatsPage: FC = () => {
 
@@ -23,7 +24,7 @@ export const MarkStatsPage: FC = () => {
                 key={val.id}
                 description={"Отметок: " + getMarksList(val.marks).length}
                 onClick={(disabledEmpty && val.marks.length == 0) ? undefined : () => navigate(navigatePath ? navigatePath : '/', { state: val })}
-                after={<Text>{calculateAverage(getMarksList(val.marks))}</Text>}>{val.lesson_name}</Cell>
+                after={<Text>{isNumberCheck(calculateAverage(getMarksList(val.marks)))}</Text>}>{val.lesson_name}</Cell>
             )}
         </List>
     );

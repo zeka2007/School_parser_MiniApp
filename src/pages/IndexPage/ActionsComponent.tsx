@@ -63,6 +63,8 @@ const ActionsComponent: FC<{ lessons: Lesson[] }> = ({ lessons }) => {
         const data = getSessionMarksData();
         setMinMark(data.min_mark)
         setMaxMark(data.max_mark)
+        minMakrChange(data.min_mark)
+        maxMakrChange(data.max_mark)
     }, [changeMarksLimitsDialog])
 
     return (

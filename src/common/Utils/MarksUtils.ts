@@ -56,13 +56,14 @@ export function getBestLesson(lessons: Lesson[]): BestLesson {
     let best_lesson_average_mark: number = 0
     lessons.map((lesson) => {
         const marks = getMarksList(lesson.marks)
-        const sum = calculateSum(marks)
-        const aver = sum / marks.length
-        if (best_lesson_average_mark < aver) {
-            best_lesson_average_mark = aver
-            best_lesson = lesson.lesson_name
+        if (marks.length) {
+            const sum = calculateSum(marks)
+            const aver = sum / marks.length
+            if (best_lesson_average_mark < aver) {
+                best_lesson_average_mark = aver
+                best_lesson = lesson.lesson_name
+            }
         }
-
     })
 
     return { lesson: best_lesson, average_mark: best_lesson_average_mark }
@@ -98,7 +99,7 @@ export async function deleteMark(lesson_id: number, mark_index: number | number[
     var marks = await cloudStorage.getItem([LESSON_PREFIX + lesson_id])
     var marksList = marks[LESSON_PREFIX + lesson_id].split(',')
 
-    if (Array.isArray(mark_index)) 
+    if (Array.isArray(mark_index))
         await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => !mark_index.includes(index)).join(','))
     else await cloudStorage.setItem(LESSON_PREFIX + lesson_id, marksList.filter((_, index) => index != mark_index).join(','))
 }

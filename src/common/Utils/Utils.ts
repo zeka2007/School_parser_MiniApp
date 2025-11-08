@@ -36,6 +36,10 @@ export function randomInteger(min: number, max: number): number {
   return Math.floor(rand);
 }
 
+export function isNumberCheck(val: any, replaceString: string = "-"): number | string {
+  return isFinite(val) ? val : replaceString
+}
+
 export function getWeekDay(date: Date): string {
   const days = [
     'Воскресенье',

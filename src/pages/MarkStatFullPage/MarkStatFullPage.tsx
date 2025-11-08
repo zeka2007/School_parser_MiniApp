@@ -3,12 +3,14 @@ import { addMark, calculateAverage, deleteMark, editMark, getMarksList } from '@
 import { HorizontalScroll } from '@/components/TG/HorizontalScroll/HorizontalScroll';
 import { MainPlaceholder } from '@/components/TG/MainPlaceholder/MainPlaceholder';
 import { FlagOutlined, StarOutline, VerticalAlignBottom, VerticalAlignTop } from '@mui/icons-material';
-import { Button, Cell, IconContainer, LargeTitle, List, Modal, Placeholder, Section, Title } from '@telegram-apps/telegram-ui';
+import { Button, Cell, IconContainer, LargeTitle, List, Modal, Placeholder, Section } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 import { useState, type FC } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AddMarkBase } from '../../components/TG/AddMark/AddMark';
 import { hapticFeedbackImpactOccurred, hapticFeedbackNotificationOccurred } from '@telegram-apps/sdk-react';
+import { BannerChip } from '@/components/TG/BannerChip/BannerChip';
+import { isNumberCheck } from '@/common/Utils/Utils';
 
 export const MarkStatsFullPage: FC = () => {
     const lesson: Lesson = useLocation().state
@@ -33,40 +35,36 @@ export const MarkStatsFullPage: FC = () => {
                 </div>
             </MainPlaceholder>
 
-            {lesson.marks.length == 0 && <MainPlaceholder>
-                <Placeholder header={<Title weight='2'>Отметок нет</Title>} />
-            </MainPlaceholder>}
-
-            {lesson.marks.length > 0 && (<><Section header='Отметки'>
+            <Section header='Отметки'>
                 <div style={{ padding: '8px' }}>
-                    <HorizontalScroll onItemClick={(mark_index: number) => {
-                        hapticFeedbackImpactOccurred('light')
-                        setCurrentMark(lesson.marks[mark_index])
-                        setCurrentMarkIndex(mark_index)
-                        setModalState(true)
-                    }} mode='mono' list={lesson.marks} />
+                    {lesson.marks.length == 0 ? <BannerChip mode='mono'>Отметок нет</BannerChip> :
+                        <HorizontalScroll onItemClick={(mark_index: number) => {
+                            hapticFeedbackImpactOccurred('light')
+                            setCurrentMark(lesson.marks[mark_index])
+                            setCurrentMarkIndex(mark_index)
+                            setModalState(true)
+                        }} mode='mono' list={lesson.marks} />
+                    }
                 </div>
-            </Section><Section header='Статистика предмета'>
-                    <Cell
-                        className="no-hover"
-                        before={<IconContainer><StarOutline fontSize="large" /></IconContainer>}
-                        subtitle={calculateAverage(marks_list)}>Средний бал</Cell>
-                    <Cell
-                        className="no-hover"
-                        before={<IconContainer><VerticalAlignBottom fontSize="large" /></IconContainer>}
-                        subtitle={Math.min(...marks_list)}>Худшая отметка</Cell>
-                    <Cell
-                        className="no-hover"
-                        before={<IconContainer><VerticalAlignTop fontSize="large" /></IconContainer>}
-                        subtitle={Math.max(...marks_list)}>Лучшая отметка</Cell>
-                    <Cell
-                        className="no-hover"
-                        before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
-                        subtitle={marks_list.length}>Количество отметок</Cell>
-
-                </Section></>
-            )
-            }
+            </Section>
+            <Section header='Статистика предмета'>
+                <Cell
+                    className="no-hover"
+                    before={<IconContainer><StarOutline fontSize="large" /></IconContainer>}
+                    subtitle={isNumberCheck(calculateAverage(marks_list))}>Средний бал</Cell>
+                <Cell
+                    className="no-hover"
+                    before={<IconContainer><VerticalAlignBottom fontSize="large" /></IconContainer>}
+                    subtitle={isNumberCheck(Math.min(...marks_list))}>Худшая отметка</Cell>
+                <Cell
+                    className="no-hover"
+                    before={<IconContainer><VerticalAlignTop fontSize="large" /></IconContainer>}
+                    subtitle={isNumberCheck(Math.max(...marks_list))}>Лучшая отметка</Cell>
+                <Cell
+                    className="no-hover"
+                    before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
+                    subtitle={marks_list.length}>Количество отметок</Cell>
+            </Section>
 
             <Modal
                 header={<ModalHeader>{currentMark ? 'Изменить/удалить отметку' : 'Добавление отметки'}</ModalHeader>}

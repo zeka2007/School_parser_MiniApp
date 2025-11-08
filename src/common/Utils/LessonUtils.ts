@@ -62,9 +62,6 @@ export async function addLesson(name: string | string[]) {
         else lessons_ids.push((Number(lessons_ids[lessons_ids.length - 1]) + 1).toString())
     }
 
-
-    console.log(lessons_names, lessons_ids.join(','))
-
     await cloudStorage.setItem(LESSONS_NAMES, lessons_names)
     await cloudStorage.setItem(LESSONS_IDS, lessons_ids.join(','))
 }

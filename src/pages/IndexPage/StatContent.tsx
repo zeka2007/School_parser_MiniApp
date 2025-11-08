@@ -1,5 +1,6 @@
 import { Lesson } from "@/common/Types/LessonTypes";
 import { getBestLesson, getMarksFromLessons } from "@/common/Utils/MarksUtils";
+import { isNumberCheck } from "@/common/Utils/Utils";
 import { BookmarksOutlined, FlagOutlined, VerticalAlignBottom, VerticalAlignTop } from "@mui/icons-material";
 import { Cell, IconContainer, Section } from "@telegram-apps/telegram-ui";
 import { FC } from "react";
@@ -13,7 +14,7 @@ const StatContent: FC<{ lessons: Lesson[] }> = ({ lessons }) => {
             <Cell
                 className="no-hover"
                 before={<IconContainer><BookmarksOutlined fontSize="large" /></IconContainer>}
-                subtitle={`${best_lesson.lesson} (${best_lesson.average_mark.toFixed(2)})`}>Лучший предмет</Cell>
+                subtitle={all_marks.length ? `${best_lesson.lesson} (${best_lesson.average_mark.toFixed(2)})` : '-'}>Лучший предмет</Cell>
             <Cell
                 className="no-hover"
                 before={<IconContainer><FlagOutlined fontSize="large" /></IconContainer>}
@@ -21,11 +22,11 @@ const StatContent: FC<{ lessons: Lesson[] }> = ({ lessons }) => {
             <Cell
                 className="no-hover"
                 before={<IconContainer><VerticalAlignBottom fontSize="large" /></IconContainer>}
-                subtitle={Math.min(...all_marks)}>Худшая отметка</Cell>
+                subtitle={isNumberCheck(Math.min(...all_marks))}>Худшая отметка</Cell>
             <Cell
                 className="no-hover"
                 before={<IconContainer><VerticalAlignTop fontSize="large" /></IconContainer>}
-                subtitle={Math.max(...all_marks)}>Лучшая отметка</Cell>
+                subtitle={isNumberCheck(Math.max(...all_marks))}>Лучшая отметка</Cell>
         </Section>
     )
 }
